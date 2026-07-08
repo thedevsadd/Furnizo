@@ -64,15 +64,15 @@ export default function Navbar() {
     <header 
       className={`sticky transition-all duration-500 ease-in-out z-50 ${
         showScrolled
-          ? "top-4 mx-auto max-w-5xl w-[92%] rounded-full bg-furnizo-brown text-furnizo-beige shadow-lg h-14 border-none"
-          : "top-0 w-full bg-white border-b border-furnizo-border text-furnizo-charcoal h-20"
+          ? "top-4 mx-auto max-w-3xl w-[90%] rounded-full bg-furnizo-brown text-furnizo-beige shadow-lg h-12 border-none"
+          : "top-0 w-full bg-white border-b border-furnizo-border text-furnizo-charcoal h-16"
       }`}
     >
       <div 
         className={`mx-auto flex items-center justify-between transition-all duration-500 ease-in-out w-full ${
           showScrolled 
-            ? "h-14 px-6" 
-            : "h-20 px-4 sm:px-6 lg:px-8 max-w-7xl"
+            ? "h-12 px-6" 
+            : "h-16 px-4 sm:px-6 lg:px-8 max-w-7xl"
         }`}
       >
         
@@ -162,10 +162,10 @@ export default function Navbar() {
               <Image
                 src={showScrolled ? "/Furnizo-Assets/Furnizo-logo-White.png" : "/Furnizo-Assets/Furnizo-logo-Main.png"}
                 alt="FURNIZO"
-                width={showScrolled ? 110 : 140}
-                height={showScrolled ? 30 : 40}
+                width={showScrolled ? 125 : 145}
+                height={showScrolled ? 33 : 38}
                 className={`w-auto object-contain transition-all duration-300 ${
-                  showScrolled ? "h-6" : "h-8 sm:h-9"
+                  showScrolled ? "h-6.5" : "h-8"
                 }`}
                 priority
               />
@@ -174,17 +174,17 @@ export default function Navbar() {
         </div>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden lg:flex lg:gap-x-8">
+        <nav className="hidden lg:flex lg:gap-x-6">
           {menuLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
               <Link
                 key={link.name}
                 href={link.href}
-                className={`font-sans text-sm font-medium tracking-wide transition-colors ${
+                className={`font-sans text-xs font-medium tracking-wide transition-colors uppercase ${
                   showScrolled 
-                    ? (isActive ? "text-white" : "text-furnizo-beige hover:text-white")
-                    : (isActive ? "text-furnizo-brown" : "text-furnizo-charcoal hover:text-furnizo-brown")
+                    ? (isActive ? "text-white font-semibold" : "text-furnizo-beige hover:text-white")
+                    : (isActive ? "text-furnizo-brown font-semibold" : "text-furnizo-charcoal hover:text-furnizo-brown")
                 }`}
               >
                 {link.name}
@@ -194,19 +194,21 @@ export default function Navbar() {
         </nav>
 
         {/* Action Controls & Icons */}
-        <div className="flex items-center gap-x-3">
+        <div className="flex items-center gap-x-2">
           
           {/* Static Search Bar (hidden in scrolled capsule state) */}
           {!showScrolled && (
-            <form onSubmit={handleSearchSubmit} className="relative hidden md:flex items-center bg-furnizo-border/30 rounded px-2.5 py-1.5 w-36 lg:w-44 border border-transparent focus-within:border-furnizo-border transition-all">
-              <Search size={13} className="text-furnizo-muted mr-1.5" />
+            <form onSubmit={handleSearchSubmit} className="relative hidden md:flex items-center border-b border-furnizo-charcoal/10 hover:border-furnizo-charcoal/30 focus-within:border-furnizo-brown transition-all py-1 w-28 lg:w-36 mr-2">
               <input
                 type="text"
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-transparent text-[11px] outline-none text-furnizo-charcoal w-full placeholder-furnizo-muted/50 font-sans"
+                className="bg-transparent text-[11px] outline-none text-furnizo-charcoal w-full placeholder-furnizo-muted/50 font-sans tracking-wide pr-5"
               />
+              <button type="submit" className="absolute right-0 top-1/2 -translate-y-1/2 p-0.5 text-furnizo-charcoal hover:text-furnizo-brown transition-colors cursor-pointer">
+                <Search size={12} />
+              </button>
             </form>
           )}
           
@@ -224,7 +226,7 @@ export default function Navbar() {
             />
             {mounted && wishlistItems.length > 0 && (
               <span 
-                className={`absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-medium transition-colors ${
+                className={`absolute top-0.5 right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full text-[8px] font-medium transition-colors ${
                   showScrolled ? "bg-furnizo-beige text-furnizo-brown" : "bg-furnizo-brown text-furnizo-beige"
                 }`}
               >
@@ -246,7 +248,7 @@ export default function Navbar() {
                   <ShoppingBag size={18} />
                   {mounted && cartTotalItems > 0 && (
                     <span 
-                      className={`absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-medium transition-colors ${
+                      className={`absolute top-0.5 right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full text-[8px] font-medium transition-colors ${
                         showScrolled ? "bg-furnizo-beige text-furnizo-brown" : "bg-furnizo-brown text-furnizo-beige"
                       }`}
                     >
