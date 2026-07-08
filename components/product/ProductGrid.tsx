@@ -9,18 +9,13 @@ interface ProductGridProps {
 }
 
 const containerVariants = {
-  hidden: { opacity: 0 },
+  hidden: {},
   show: {
-    opacity: 1,
     transition: {
-      staggerChildren: 0.05,
+      staggerChildren: 0.07,
+      delayChildren: 0.05,
     },
   },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 12 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" as const } },
 };
 
 export default function ProductGrid({ products }: ProductGridProps) {
@@ -29,12 +24,10 @@ export default function ProductGrid({ products }: ProductGridProps) {
       variants={containerVariants}
       initial="hidden"
       animate="show"
-      className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4"
+      className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-10"
     >
-      {products.map((product) => (
-        <motion.div key={product.id} variants={itemVariants}>
-          <ProductCard product={product} />
-        </motion.div>
+      {products.map((product, index) => (
+        <ProductCard key={product.id} product={product} index={index} />
       ))}
     </motion.div>
   );
