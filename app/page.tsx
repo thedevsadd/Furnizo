@@ -39,7 +39,7 @@ export default function Home() {
 
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="relative h-[85vh] w-full overflow-hidden bg-furnizo-border/20">
+        <section className="relative h-[80vh] w-full overflow-hidden bg-furnizo-border/20">
           <div className="absolute inset-0 z-0">
             <Image
               src="/Furnizo-Assets/Hero-image.jpeg"

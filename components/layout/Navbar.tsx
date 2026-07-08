@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { ShoppingBag, Heart, Menu, X, Plus, Minus, Trash2 } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { ShoppingBag, Heart, Menu, X, Plus, Minus, Trash2, Search } from "lucide-react";
 import { useCartStore } from "@/lib/store/cartStore";
 import { useWishlistStore } from "@/lib/store/wishlistStore";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -12,9 +12,11 @@ import Image from "next/image";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   
   // Zustand State
   const cartItems = useCartStore((state) => state.items);
@@ -39,14 +41,22 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const navLinks = [
-    { name: "Shop All", href: "/products" },
-    { name: "Chairs", href: "/products?category=Chairs" },
-    { name: "Tables", href: "/products?category=Tables" },
-    { name: "Sofas", href: "/products?category=Sofas" },
-    { name: "Lighting", href: "/products?category=Lighting" },
-    { name: "Storage", href: "/products?category=Storage" },
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/products?search=${encodeURIComponent(searchQuery)}`);
+      setMobileMenuOpen(false);
+    }
+  };
+
+  const menuLinks = [
+    { name: "Shop", href: "/products" },
+    { name: "Offers", href: "/products?tag=offers" },
+    { name: "Collections", href: "/products" },
+    { name: "About", href: "/products" },
   ];
+
+  const categories = ["Chairs", "Tables", "Sofas", "Lighting", "Storage"];
 
   const showScrolled = isScrolled && !mobileMenuOpen;
 
@@ -54,7 +64,7 @@ export default function Navbar() {
     <header 
       className={`sticky transition-all duration-500 ease-in-out z-50 ${
         showScrolled
-          ? "top-4 mx-auto max-w-4xl w-[92%] rounded-full bg-furnizo-brown text-furnizo-beige shadow-lg h-14 border-none"
+          ? "top-4 mx-auto max-w-5xl w-[92%] rounded-full bg-furnizo-brown text-furnizo-beige shadow-lg h-14 border-none"
           : "top-0 w-full bg-white border-b border-furnizo-border text-furnizo-charcoal h-20"
       }`}
     >
@@ -66,16 +76,84 @@ export default function Navbar() {
         }`}
       >
         
-        {/* Mobile Menu Toggle */}
-        <button
-          type="button"
-          className={`p-2 transition-colors lg:hidden ${
-            showScrolled ? "text-furnizo-beige hover:text-white" : "text-furnizo-charcoal hover:text-furnizo-brown"
-          }`}
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        >
-          {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-        </button>
+        {/* Mobile Menu Toggle & Side Drawer */}
+        <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+          <SheetTrigger
+            render={
+              <button
+                type="button"
+                className={`p-2 transition-colors lg:hidden ${
+                  showScrolled ? "text-furnizo-beige hover:text-white" : "text-furnizo-charcoal hover:text-furnizo-brown"
+                }`}
+                aria-label="Open mobile menu"
+              >
+                <Menu size={20} />
+              </button>
+            }
+          />
+          <SheetContent side="left" className="w-[300px] bg-furnizo-beige border-r border-furnizo-border p-6 flex flex-col h-full">
+            <SheetHeader className="border-b border-furnizo-border pb-4 flex flex-row items-center justify-between">
+              <Image
+                src="/Furnizo-Assets/Furnizo-logo-Main.png"
+                alt="FURNIZO"
+                width={120}
+                height={35}
+                className="h-7 w-auto object-contain"
+              />
+            </SheetHeader>
+            
+            {/* Mobile Search */}
+            <form onSubmit={handleSearchSubmit} className="relative flex items-center bg-furnizo-border/30 rounded-md px-3 py-2 mt-6">
+              <Search size={14} className="text-furnizo-muted mr-2" />
+              <input
+                type="text"
+                placeholder="Search catalog..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="bg-transparent text-xs outline-none text-furnizo-charcoal w-full placeholder-furnizo-muted/60 font-sans"
+              />
+            </form>
+
+            {/* Mobile Navigation Links */}
+            <div className="flex-1 overflow-y-auto py-6 space-y-8">
+              <div className="space-y-4">
+                <h3 className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-furnizo-brown">
+                  Menu
+                </h3>
+                <div className="flex flex-col gap-3.5 font-sans text-sm text-furnizo-charcoal">
+                  {menuLinks.map((link) => (
+                    <Link
+                      key={link.name}
+                      href={link.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="hover:text-furnizo-brown transition-colors"
+                    >
+                      {link.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-furnizo-brown">
+                  Categories
+                </h3>
+                <div className="flex flex-col gap-3 font-sans text-sm text-furnizo-muted">
+                  {categories.map((cat) => (
+                    <Link
+                      key={cat}
+                      href={`/products?category=${cat}`}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="hover:text-furnizo-charcoal transition-colors"
+                    >
+                      {cat}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </SheetContent>
+        </Sheet>
 
         {/* Brand Logo */}
         <div className="flex items-center">
@@ -84,49 +162,58 @@ export default function Navbar() {
               <Image
                 src={showScrolled ? "/Furnizo-Assets/Furnizo-logo-White.png" : "/Furnizo-Assets/Furnizo-logo-Main.png"}
                 alt="FURNIZO"
-                width={120}
-                height={35}
-                className="h-7 w-auto object-contain transition-all duration-300"
+                width={showScrolled ? 110 : 140}
+                height={showScrolled ? 30 : 40}
+                className={`w-auto object-contain transition-all duration-300 ${
+                  showScrolled ? "h-6" : "h-8 sm:h-9"
+                }`}
                 priority
               />
             )}
           </Link>
         </div>
 
-        {/* Desktop Navigation */}
+        {/* Desktop Navigation Links */}
         <nav className="hidden lg:flex lg:gap-x-8">
-          {showScrolled ? (
-            <Link
-              href="/products"
-              className="font-sans text-sm font-medium tracking-wide transition-colors text-furnizo-beige hover:text-white"
-            >
-              Shop
-            </Link>
-          ) : (
-            navLinks.map((link) => {
-              const isActive = pathname === link.href || (link.href.includes("category") && pathname.includes(link.href.split("?")[0]));
-              return (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className={`font-sans text-sm font-medium tracking-wide transition-colors hover:text-furnizo-brown ${
-                    isActive ? "text-furnizo-brown" : "text-furnizo-charcoal"
-                  }`}
-                >
-                  {link.name}
-                </Link>
-              );
-            })
-          )}
+          {menuLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.name}
+                href={link.href}
+                className={`font-sans text-sm font-medium tracking-wide transition-colors ${
+                  showScrolled 
+                    ? (isActive ? "text-white" : "text-furnizo-beige hover:text-white")
+                    : (isActive ? "text-furnizo-brown" : "text-furnizo-charcoal hover:text-furnizo-brown")
+                }`}
+              >
+                {link.name}
+              </Link>
+            );
+          })}
         </nav>
 
-        {/* Icons Action Bar */}
-        <div className="flex items-center gap-x-2">
+        {/* Action Controls & Icons */}
+        <div className="flex items-center gap-x-3">
+          
+          {/* Static Search Bar (hidden in scrolled capsule state) */}
+          {!showScrolled && (
+            <form onSubmit={handleSearchSubmit} className="relative hidden md:flex items-center bg-furnizo-border/30 rounded px-2.5 py-1.5 w-36 lg:w-44 border border-transparent focus-within:border-furnizo-border transition-all">
+              <Search size={13} className="text-furnizo-muted mr-1.5" />
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="bg-transparent text-[11px] outline-none text-furnizo-charcoal w-full placeholder-furnizo-muted/50 font-sans"
+              />
+            </form>
+          )}
           
           {/* Wishlist Link */}
           <Link
             href="/wishlist"
-            className={`relative p-2.5 transition-colors ${
+            className={`relative p-2 transition-colors ${
               showScrolled ? "text-furnizo-beige hover:text-white" : "text-furnizo-charcoal hover:text-furnizo-brown"
             }`}
             aria-label="Wishlist"
@@ -137,7 +224,7 @@ export default function Navbar() {
             />
             {mounted && wishlistItems.length > 0 && (
               <span 
-                className={`absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-medium transition-colors ${
+                className={`absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-medium transition-colors ${
                   showScrolled ? "bg-furnizo-beige text-furnizo-brown" : "bg-furnizo-brown text-furnizo-beige"
                 }`}
               >
@@ -151,7 +238,7 @@ export default function Navbar() {
             <SheetTrigger
               render={
                 <button
-                  className={`relative p-2.5 transition-colors cursor-pointer ${
+                  className={`relative p-2 transition-colors cursor-pointer ${
                     showScrolled ? "text-furnizo-beige hover:text-white" : "text-furnizo-charcoal hover:text-furnizo-brown"
                   }`}
                   aria-label="Cart"
@@ -159,7 +246,7 @@ export default function Navbar() {
                   <ShoppingBag size={18} />
                   {mounted && cartTotalItems > 0 && (
                     <span 
-                      className={`absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-medium transition-colors ${
+                      className={`absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-medium transition-colors ${
                         showScrolled ? "bg-furnizo-beige text-furnizo-brown" : "bg-furnizo-brown text-furnizo-beige"
                       }`}
                     >
@@ -272,24 +359,6 @@ export default function Navbar() {
           </Sheet>
         </div>
       </div>
-
-      {/* Mobile Navigation Drawer */}
-      {mobileMenuOpen && (
-        <div className="lg:hidden border-b border-furnizo-border bg-white rounded-b-2xl shadow-lg">
-          <div className="space-y-1 px-4 py-4 sm:px-6">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className="block font-sans text-base font-medium text-furnizo-charcoal py-2 border-b border-furnizo-border/30 last:border-b-0 hover:text-furnizo-brown"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {link.name}
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
     </header>
   );
 }
