@@ -42,7 +42,7 @@ export default function Home() {
         <section className="relative h-[85vh] w-full overflow-hidden bg-furnizo-border/20">
           <div className="absolute inset-0 z-0">
             <Image
-              src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1600&auto=format&fit=crop"
+              src="/Furnizo-Assets/Hero-image.jpeg"
               alt="Minimalist room setup"
               fill
               className="object-cover brightness-[0.95]"

@@ -14,6 +14,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   
   // Zustand State
   const cartItems = useCartStore((state) => state.items);
@@ -25,6 +26,17 @@ export default function Navbar() {
 
   useEffect(() => {
     setMounted(true);
+
+    const handleScroll = () => {
+      if (window.scrollY > 40) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const navLinks = [
@@ -36,59 +48,99 @@ export default function Navbar() {
     { name: "Storage", href: "/products?category=Storage" },
   ];
 
+  const showScrolled = isScrolled && !mobileMenuOpen;
+
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-furnizo-border bg-furnizo-beige/80 backdrop-blur-md">
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <header 
+      className={`sticky transition-all duration-500 ease-in-out z-50 ${
+        showScrolled
+          ? "top-4 mx-auto max-w-4xl w-[92%] rounded-full bg-furnizo-brown text-furnizo-beige shadow-lg h-14 border-none"
+          : "top-0 w-full bg-white border-b border-furnizo-border text-furnizo-charcoal h-20"
+      }`}
+    >
+      <div 
+        className={`mx-auto flex items-center justify-between transition-all duration-500 ease-in-out w-full ${
+          showScrolled 
+            ? "h-14 px-6" 
+            : "h-20 px-4 sm:px-6 lg:px-8 max-w-7xl"
+        }`}
+      >
         
         {/* Mobile Menu Toggle */}
         <button
           type="button"
-          className="p-2 text-furnizo-charcoal lg:hidden"
+          className={`p-2 transition-colors lg:hidden ${
+            showScrolled ? "text-furnizo-beige hover:text-white" : "text-furnizo-charcoal hover:text-furnizo-brown"
+          }`}
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
 
         {/* Brand Logo */}
-        <div className="flex-1 lg:flex-initial">
-          <Link href="/" className="group flex items-center gap-2">
-            <span className="h-6 w-6 rounded-full bg-furnizo-brown"></span>
-            <span className="font-sans text-xl font-light tracking-[0.2em] text-furnizo-charcoal group-hover:text-furnizo-brown transition-colors">
-              FURNIZO
-            </span>
+        <div className="flex items-center">
+          <Link href="/" className="flex items-center">
+            {mounted && (
+              <Image
+                src={showScrolled ? "/Furnizo-Assets/Furnizo-logo-White.png" : "/Furnizo-Assets/Furnizo-logo-Main.png"}
+                alt="FURNIZO"
+                width={120}
+                height={35}
+                className="h-7 w-auto object-contain transition-all duration-300"
+                priority
+              />
+            )}
           </Link>
         </div>
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex lg:gap-x-8">
-          {navLinks.map((link) => {
-            const isActive = pathname === link.href || (link.href.includes("category") && pathname.includes(link.href.split("?")[0]));
-            return (
-              <Link
-                key={link.name}
-                href={link.href}
-                className={`font-sans text-sm font-medium tracking-wide transition-colors hover:text-furnizo-brown ${
-                  isActive ? "text-furnizo-brown" : "text-furnizo-charcoal"
-                }`}
-              >
-                {link.name}
-              </Link>
-            );
-          })}
+          {showScrolled ? (
+            <Link
+              href="/products"
+              className="font-sans text-sm font-medium tracking-wide transition-colors text-furnizo-beige hover:text-white"
+            >
+              Shop
+            </Link>
+          ) : (
+            navLinks.map((link) => {
+              const isActive = pathname === link.href || (link.href.includes("category") && pathname.includes(link.href.split("?")[0]));
+              return (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className={`font-sans text-sm font-medium tracking-wide transition-colors hover:text-furnizo-brown ${
+                    isActive ? "text-furnizo-brown" : "text-furnizo-charcoal"
+                  }`}
+                >
+                  {link.name}
+                </Link>
+              );
+            })
+          )}
         </nav>
 
         {/* Icons Action Bar */}
-        <div className="flex items-center gap-x-3">
+        <div className="flex items-center gap-x-2">
           
           {/* Wishlist Link */}
           <Link
             href="/wishlist"
-            className="relative p-2.5 text-furnizo-charcoal hover:text-furnizo-brown transition-colors"
+            className={`relative p-2.5 transition-colors ${
+              showScrolled ? "text-furnizo-beige hover:text-white" : "text-furnizo-charcoal hover:text-furnizo-brown"
+            }`}
             aria-label="Wishlist"
           >
-            <Heart size={20} className={mounted && wishlistItems.length > 0 ? "fill-furnizo-brown text-furnizo-brown" : ""} />
+            <Heart 
+              size={18} 
+              className={mounted && wishlistItems.length > 0 ? (showScrolled ? "fill-white text-white" : "fill-furnizo-brown text-furnizo-brown") : ""} 
+            />
             {mounted && wishlistItems.length > 0 && (
-              <span className="absolute top-1.5 right-1.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-furnizo-brown text-[10px] font-medium text-furnizo-beige">
+              <span 
+                className={`absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-medium transition-colors ${
+                  showScrolled ? "bg-furnizo-beige text-furnizo-brown" : "bg-furnizo-brown text-furnizo-beige"
+                }`}
+              >
                 {wishlistItems.length}
               </span>
             )}
@@ -99,12 +151,18 @@ export default function Navbar() {
             <SheetTrigger
               render={
                 <button
-                  className="relative p-2.5 text-furnizo-charcoal hover:text-furnizo-brown transition-colors cursor-pointer"
+                  className={`relative p-2.5 transition-colors cursor-pointer ${
+                    showScrolled ? "text-furnizo-beige hover:text-white" : "text-furnizo-charcoal hover:text-furnizo-brown"
+                  }`}
                   aria-label="Cart"
                 >
-                  <ShoppingBag size={20} />
+                  <ShoppingBag size={18} />
                   {mounted && cartTotalItems > 0 && (
-                    <span className="absolute top-1.5 right-1.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-furnizo-brown text-[10px] font-medium text-furnizo-beige">
+                    <span 
+                      className={`absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-medium transition-colors ${
+                        showScrolled ? "bg-furnizo-beige text-furnizo-brown" : "bg-furnizo-brown text-furnizo-beige"
+                      }`}
+                    >
                       {cartTotalItems}
                     </span>
                   )}
@@ -217,7 +275,7 @@ export default function Navbar() {
 
       {/* Mobile Navigation Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-b border-furnizo-border bg-furnizo-beige">
+        <div className="lg:hidden border-b border-furnizo-border bg-white rounded-b-2xl shadow-lg">
           <div className="space-y-1 px-4 py-4 sm:px-6">
             {navLinks.map((link) => (
               <Link
