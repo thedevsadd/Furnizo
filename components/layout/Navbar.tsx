@@ -161,6 +161,7 @@ export default function Navbar() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="bg-transparent text-xs outline-none text-furnizo-charcoal w-full placeholder-furnizo-muted/60 font-sans"
+                    suppressHydrationWarning
                   />
                 </form>
 
@@ -272,6 +273,7 @@ export default function Navbar() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="bg-transparent text-[11px] outline-none text-furnizo-charcoal w-24 lg:w-32 placeholder-furnizo-muted/50 font-sans tracking-wide"
+                  suppressHydrationWarning
                 />
                 <button
                   type="submit"

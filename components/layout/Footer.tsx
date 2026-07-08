@@ -34,17 +34,22 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/products?category=Chairs" className="hover:text-furnizo-brown transition-colors">
-                  Lounge Chairs
+                  Chairs
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=Tables" className="hover:text-furnizo-brown transition-colors">
-                  Dining Tables
+                <Link href="/products?category=Coffee+Tables" className="hover:text-furnizo-brown transition-colors">
+                  Coffee Tables
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=Sofas" className="hover:text-furnizo-brown transition-colors">
-                  Linen Sofas
+                <Link href="/products?category=Wardrobes" className="hover:text-furnizo-brown transition-colors">
+                  Wardrobes
+                </Link>
+              </li>
+              <li>
+                <Link href="/products?category=Shelves" className="hover:text-furnizo-brown transition-colors">
+                  Shelves
                 </Link>
               </li>
             </ul>
@@ -93,6 +98,7 @@ export default function Footer() {
                 placeholder="Email address"
                 className="w-full bg-transparent font-sans text-xs text-furnizo-charcoal placeholder-furnizo-muted/60 outline-none"
                 required
+                suppressHydrationWarning
               />
               <button
                 type="submit"
@@ -107,7 +113,7 @@ export default function Footer() {
 
         {/* Legal Credit details */}
         <div className="mt-16 flex flex-col sm:flex-row items-center justify-between border-t border-furnizo-border/50 pt-8 gap-4">
-          <p className="font-sans text-[10px] text-furnizo-muted tracking-wider">
+          <p className="font-sans text-[10px] text-furnizo-muted tracking-wider" suppressHydrationWarning>
             &copy; {new Date().getFullYear()} FURNIZO. All rights reserved.
           </p>
           <div className="flex gap-x-6 text-[10px] font-sans text-furnizo-muted tracking-wider">
