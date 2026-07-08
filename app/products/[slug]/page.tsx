@@ -5,14 +5,13 @@ import ProductDetailsClient from "@/components/product/ProductDetailsClient";
 import { products } from "@/data/products";
 
 interface PageProps {
-  params: {
-    slug: string;
-  };
+  params: Promise<{ slug: string }>;
 }
 
 // Generate page metadata dynamically
 export async function generateMetadata({ params }: PageProps) {
-  const product = products.find((p) => p.slug === params.slug);
+  const { slug } = await params;
+  const product = products.find((p) => p.slug === slug);
   if (!product) return {};
 
   return {
@@ -28,29 +27,29 @@ export async function generateStaticParams() {
   }));
 }
 
-export default function ProductDetailPage({ params }: PageProps) {
-  const product = products.find((p) => p.slug === params.slug);
+export default async function ProductDetailPage({ params }: PageProps) {
+  const { slug } = await params;
+  const product = products.find((p) => p.slug === slug);
 
   if (!product) {
     notFound();
   }
 
-  // Fetch related products sharing same category, excluding current product (max 4)
+  // Related products: same category, excluding current (max 4)
   const relatedProducts = products
     .filter((p) => p.category === product.category && p.id !== product.id)
     .slice(0, 4);
 
-  // If there are less than 4 related items in same category, pad with overlapping tags
+  // If fewer than 4, pad with tag-overlapping products from other categories
   if (relatedProducts.length < 4) {
     const ids = new Set(relatedProducts.map((p) => p.id));
-    const extraProducts = products.filter(
+    const extras = products.filter(
       (p) =>
         p.id !== product.id &&
         !ids.has(p.id) &&
         p.tags.some((tag) => product.tags.includes(tag))
     );
-    
-    for (const extra of extraProducts) {
+    for (const extra of extras) {
       if (relatedProducts.length >= 4) break;
       relatedProducts.push(extra);
     }
