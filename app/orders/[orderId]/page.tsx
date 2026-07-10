@@ -178,17 +178,17 @@ export default function OrderConfirmationPage({ params }: PageProps) {
           </div>
 
           {/* Action Buttons */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
-            <Link href="/products" className="w-full">
-              <Button className="w-full font-sans text-xs tracking-wider uppercase bg-furnizo-brown text-furnizo-beige hover:bg-furnizo-brown/95 py-4 h-12 flex items-center justify-center gap-2 cursor-pointer border border-transparent">
+          <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 pt-6 w-full">
+            <Link href="/products" className="w-full sm:w-auto sm:flex-1 max-w-xs">
+              <Button className="w-full font-sans text-xs tracking-wider uppercase bg-furnizo-brown text-furnizo-beige hover:bg-furnizo-brown/95 py-3.5 h-11 flex items-center justify-center gap-1.5 cursor-pointer border border-transparent rounded-full font-semibold transition-all">
                 Continue Shopping
-                <ChevronRight size={14} />
+                <ChevronRight size={12} />
               </Button>
             </Link>
 
             {currentStatus !== "Cancelled" && (
-              <Link href={`/order-status?id=${order.id}`} className="w-full">
-                <Button variant="outline" className="w-full font-sans text-xs tracking-wider uppercase border-furnizo-brown text-furnizo-brown hover:bg-furnizo-brown hover:text-furnizo-beige py-4 h-12 flex items-center justify-center gap-2 cursor-pointer">
+              <Link href={`/order-status?id=${order.id}`} className="w-full sm:w-auto sm:flex-1 max-w-xs">
+                <Button variant="outline" className="w-full font-sans text-xs tracking-wider uppercase border-furnizo-brown text-furnizo-brown hover:bg-furnizo-brown hover:text-furnizo-beige py-3.5 h-11 flex items-center justify-center gap-1.5 cursor-pointer rounded-full font-semibold transition-all">
                   Track Delivery
                 </Button>
               </Link>
@@ -202,15 +202,15 @@ export default function OrderConfirmationPage({ params }: PageProps) {
                     toast.success("Order cancelled successfully.", { icon: "🧹" });
                   }
                 }}
-                className="w-full font-sans text-xs tracking-wider uppercase bg-red-600 hover:bg-red-700 text-white py-4 h-12 flex items-center justify-center gap-2 cursor-pointer border border-transparent"
+                className="w-full sm:w-auto sm:flex-1 max-w-xs font-sans text-xs tracking-wider uppercase bg-red-600 hover:bg-red-700 text-white py-3.5 h-11 flex items-center justify-center gap-1.5 cursor-pointer border border-transparent rounded-full font-semibold transition-all"
               >
                 Cancel Order
               </Button>
             )}
 
-            <Link href="/orders" className="w-full">
-              <Button variant="outline" className="w-full font-sans text-xs tracking-wider uppercase border-furnizo-border text-furnizo-charcoal hover:bg-furnizo-border/20 py-4 h-12 flex items-center justify-center gap-2 cursor-pointer">
-                <ShoppingBag size={14} />
+            <Link href="/orders" className="w-full sm:w-auto sm:flex-1 max-w-xs">
+              <Button variant="outline" className="w-full font-sans text-xs tracking-wider uppercase border-furnizo-border text-furnizo-charcoal hover:bg-furnizo-border/20 py-3.5 h-11 flex items-center justify-center gap-1.5 cursor-pointer rounded-full font-medium transition-all">
+                <ShoppingBag size={12} />
                 View All Orders
               </Button>
             </Link>
