@@ -133,7 +133,11 @@ export default function ProductCard({ product, index = 0, darkMode = false }: Pr
             <div className="absolute bottom-0 left-0 right-0 z-10 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out p-3">
               <button
                 onClick={handleAddToCart}
-                className="w-full flex items-center justify-center gap-2 bg-furnizo-brown text-furnizo-beige font-sans text-[11px] tracking-widest uppercase py-2.5 rounded-md hover:bg-furnizo-charcoal transition-colors cursor-pointer"
+                className={`w-full flex items-center justify-center gap-2 font-sans text-[11px] tracking-widest uppercase py-2.5 rounded-md transition-colors cursor-pointer ${
+                  darkMode
+                    ? "bg-furnizo-brown text-furnizo-beige hover:bg-furnizo-beige hover:text-furnizo-charcoal"
+                    : "bg-furnizo-brown text-furnizo-beige hover:bg-furnizo-charcoal"
+                }`}
               >
                 <ShoppingBag size={12} strokeWidth={1.8} />
                 Quick Add
@@ -147,7 +151,7 @@ export default function ProductCard({ product, index = 0, darkMode = false }: Pr
           <p className={`text-[9px] font-sans font-semibold uppercase tracking-[0.18em] ${darkMode ? "text-furnizo-beige/50" : "text-furnizo-muted/80"}`}>
             {product.category}
           </p>
-          <h3 className={`mt-1 font-sans text-sm font-medium line-clamp-1 transition-colors ${darkMode ? "text-furnizo-beige group-hover:text-furnizo-brown" : "text-furnizo-charcoal group-hover:text-furnizo-brown"}`}>
+          <h3 className={`mt-1 font-sans text-sm font-medium line-clamp-1 transition-colors ${darkMode ? "text-furnizo-beige group-hover:text-furnizo-brown/80" : "text-furnizo-charcoal group-hover:text-furnizo-brown"}`}>
             {product.name}
           </h3>
           <div className="mt-1 flex items-baseline gap-2">
