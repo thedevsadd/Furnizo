@@ -175,7 +175,7 @@ export default function Home() {
               </div>
               <Link
                 href="/products"
-                className="w-fit mt-4 md:mt-0 inline-flex items-center gap-2 font-sans text-xs font-medium tracking-wider text-furnizo-beige/80 border-b border-furnizo-beige/40 pb-1 hover:text-furnizo-brown hover:border-furnizo-brown transition-colors"
+                className="w-fit mt-4 md:mt-0 inline-flex items-center gap-2 font-sans text-xs font-medium tracking-wider text-furnizo-beige/80 border-b border-furnizo-beige/40 pb-1 hover:text-furnizo-beige/60 hover:border-furnizo-beige/60 transition-colors"
               >
                 Browse All Products
                 <ArrowRight size={12} />
