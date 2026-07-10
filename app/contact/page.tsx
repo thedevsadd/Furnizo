@@ -75,8 +75,7 @@ export default function ContactPage() {
                 <Mail className="text-furnizo-brown h-5 w-5 mt-0.5 flex-shrink-0" />
                 <div>
                   <h4 className="font-medium text-furnizo-charcoal mb-0.5">Electronic Inquiries</h4>
-                  <p className="hover:text-furnizo-brown transition-colors cursor-pointer">studio@furnizo.design</p>
-                  <p className="hover:text-furnizo-brown transition-colors cursor-pointer">support@furnizo.design</p>
+                  <p className="hover:text-furnizo-brown transition-colors cursor-pointer">tawhidsadman.dev@gmail.com</p>
                 </div>
               </div>
 
@@ -84,7 +83,7 @@ export default function ContactPage() {
                 <Phone className="text-furnizo-brown h-5 w-5 mt-0.5 flex-shrink-0" />
                 <div>
                   <h4 className="font-medium text-furnizo-charcoal mb-0.5">Direct Line</h4>
-                  <p className="hover:text-furnizo-brown transition-colors cursor-pointer">+45 91 82 73 64</p>
+                  <p className="hover:text-furnizo-brown transition-colors cursor-pointer">0000000000</p>
                 </div>
               </div>
 
