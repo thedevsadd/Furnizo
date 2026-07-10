@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { ArrowLeft, CreditCard, Lock } from "lucide-react";
+import { ArrowLeft, CreditCard, Lock, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -42,6 +42,20 @@ export default function CheckoutPage() {
     expiry: "",
     cvc: "",
   });
+
+  // Custom Dropdown State
+  const [cityOpen, setCityOpen] = useState(false);
+  const cityRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (cityRef.current && !cityRef.current.contains(e.target as Node)) {
+        setCityOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, []);
 
   // Form Fields
   const [formData, setFormData] = useState<CustomerInfo>({
@@ -299,31 +313,45 @@ export default function CheckoutPage() {
                   {/* City, State & Zip Code Row */}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     {/* City Selection */}
-                    <div className="space-y-2">
-                      <Label htmlFor="city" className="font-sans text-xs text-furnizo-charcoal uppercase tracking-wider">
+                    <div className="space-y-2 relative" ref={cityRef}>
+                      <Label className="font-sans text-xs text-furnizo-charcoal uppercase tracking-wider">
                         City
                       </Label>
-                      <select
-                        id="city"
-                        name="city"
-                        value={formData.city}
-                        onChange={(e) => {
-                          const cityName = e.target.value;
-                          const cityObj = californiaCities.find(c => c.name === cityName);
-                          setFormData(prev => ({
-                            ...prev,
-                            city: cityName,
-                            postalCode: cityObj ? cityObj.zip : prev.postalCode
-                          }));
-                        }}
-                        required
-                        className="w-full bg-transparent border border-furnizo-border rounded font-sans text-sm h-11 px-3 focus:outline-hidden focus:border-furnizo-brown text-furnizo-charcoal"
+                      
+                      {/* Custom select trigger */}
+                      <div
+                        onClick={() => setCityOpen(!cityOpen)}
+                        className="w-full bg-transparent border border-furnizo-border rounded font-sans text-sm h-11 px-3 flex items-center justify-between text-furnizo-charcoal cursor-pointer select-none focus:ring-1 focus:ring-furnizo-brown focus-visible:outline-hidden"
                       >
-                        <option value="" disabled className="text-furnizo-muted">Select City</option>
-                        {californiaCities.map(c => (
-                          <option key={c.name} value={c.name} className="text-furnizo-charcoal">{c.name}</option>
-                        ))}
-                      </select>
+                        <span className={formData.city ? "text-furnizo-charcoal font-normal" : "text-furnizo-muted/60"}>
+                          {formData.city || "Select City"}
+                        </span>
+                        <ChevronDown size={14} className={`text-furnizo-muted transition-transform duration-200 ${cityOpen ? "rotate-180" : ""}`} />
+                      </div>
+
+                      {/* Floating custom options panel */}
+                      {cityOpen && (
+                        <div className="absolute left-0 right-0 z-30 mt-1.5 bg-white border border-furnizo-border rounded shadow-md max-h-60 overflow-y-auto py-1 animate-fadeIn">
+                          {californiaCities.map(c => (
+                            <div
+                              key={c.name}
+                              onClick={() => {
+                                setFormData(prev => ({
+                                  ...prev,
+                                  city: c.name,
+                                  postalCode: c.zip
+                                }));
+                                setCityOpen(false);
+                              }}
+                              className={`px-4 py-2.5 font-sans text-sm cursor-pointer transition-colors hover:bg-furnizo-beige hover:text-furnizo-brown ${
+                                formData.city === c.name ? "bg-furnizo-beige/50 text-furnizo-brown font-medium" : "text-furnizo-charcoal"
+                              }`}
+                            >
+                              {c.name}
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
 
                     {/* State (Fixed) */}

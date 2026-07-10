@@ -6,7 +6,7 @@ import ProductGrid from "@/components/product/ProductGrid";
 import CuratedCategories from "@/components/product/CuratedCategories";
 import NewArrivalsCarousel from "@/components/product/NewArrivalsCarousel";
 import { products } from "@/data/products";
-import { ArrowRight, Trees, ShieldCheck, Sparkles, MapPin } from "lucide-react";
+import { ArrowRight, Trees, ShieldCheck, Wrench, MapPin } from "lucide-react";
 
 export default function Home() {
   // Get 4 featured bestsellers
@@ -117,7 +117,7 @@ export default function Home() {
               <div className="bg-white/50 backdrop-blur-xs border border-furnizo-border/60 rounded-xl p-6 hover:-translate-y-1 transition-all duration-300 shadow-xs flex flex-col justify-between h-full">
                 <div className="space-y-4">
                   <div className="h-10 w-10 rounded-lg bg-furnizo-brown/10 flex items-center justify-center text-furnizo-brown">
-                    <Sparkles size={20} />
+                    <Wrench size={20} />
                   </div>
                   <h3 className="font-sans text-sm font-semibold text-furnizo-charcoal uppercase tracking-wider">
                     Rust-Free Hardware
