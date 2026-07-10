@@ -39,11 +39,6 @@ export default function NewArrivalsPage() {
               <span className="text-furnizo-brown">New Arrivals</span>
             </nav>
 
-            {/* Sparkle Badge */}
-            <div className="flex justify-center">
-              <SparkleBadge />
-            </div>
-
             {/* Big Headline */}
             <div className="flex flex-col items-center select-none py-1">
               <h1 className="font-serif text-7xl sm:text-8xl md:text-9xl font-bold tracking-widest leading-none select-none sparkle-new-large uppercase">

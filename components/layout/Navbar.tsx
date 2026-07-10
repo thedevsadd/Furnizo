@@ -102,6 +102,15 @@ export default function Navbar() {
   return (
     <>
       <SparkleNew />
+      {/* Top Thin Marquee Banner */}
+      <div className="w-full bg-furnizo-brown text-furnizo-beige py-1.5 overflow-hidden select-none border-b border-[#FAF9F6]/10 z-50 relative flex">
+        <div className="whitespace-nowrap animate-marquee text-[9px] font-sans font-medium uppercase tracking-[0.25em] flex-shrink-0">
+          LIMITED TIME ARCHIVAL SALE: USE CODE ARCHIVE15 FOR AN ADDITIONAL 15% OFF ALL DESIGNS &nbsp;•&nbsp; COMPLIMENTARY INSIDE DELIVERY ON ORDERS OVER $1,500 &nbsp;•&nbsp; CRAFTED IN COPENHAGEN &nbsp;•&nbsp;&nbsp;
+        </div>
+        <div className="whitespace-nowrap animate-marquee text-[9px] font-sans font-medium uppercase tracking-[0.25em] flex-shrink-0" aria-hidden="true">
+          LIMITED TIME ARCHIVAL SALE: USE CODE ARCHIVE15 FOR AN ADDITIONAL 15% OFF ALL DESIGNS &nbsp;•&nbsp; COMPLIMENTARY INSIDE DELIVERY ON ORDERS OVER $1,500 &nbsp;•&nbsp; CRAFTED IN COPENHAGEN &nbsp;•&nbsp;&nbsp;
+        </div>
+      </div>
       <header
         className={`sticky transition-all duration-500 ease-in-out z-50 ${
           showScrolled

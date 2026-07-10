@@ -50,8 +50,8 @@ export default function CountdownTimer() {
 
   if (!timeLeft) {
     return (
-      <div className="flex justify-center gap-4 sm:gap-6 py-6 opacity-0">
-        <div className="h-16 w-16 sm:h-20 sm:w-20 rounded border border-furnizo-border bg-furnizo-border/10 flex flex-col justify-center items-center" />
+      <div className="flex justify-center py-4 opacity-0">
+        <div className="h-28 w-72 rounded-xl bg-furnizo-charcoal" />
       </div>
     );
   }
@@ -59,30 +59,32 @@ export default function CountdownTimer() {
   const pad = (num: number) => String(num).padStart(2, "0");
 
   return (
-    <div className="flex flex-col items-center space-y-3">
-      <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.25em] text-furnizo-brown">
-        Limited Time Offer Ends In
-      </span>
-      <div className="flex justify-center gap-3 sm:gap-4 font-mono text-2xl sm:text-3xl font-light text-furnizo-charcoal">
-        <div className="flex flex-col items-center">
-          <div className="h-14 w-14 sm:h-16 sm:w-16 rounded border border-furnizo-border bg-furnizo-border/20 flex justify-center items-center font-normal shadow-sm">
-            {pad(timeLeft.hours)}
+    <div className="flex flex-col items-center space-y-4">
+      {/* Premium Dark Panel Countdown */}
+      <div className="bg-furnizo-charcoal text-[#FAF9F6] py-5 px-8 sm:px-10 rounded-xl shadow-md border border-furnizo-charcoal/90 w-full max-w-sm mx-auto flex flex-col items-center space-y-3.5">
+        <span className="font-sans text-[9px] font-semibold uppercase tracking-[0.3em] text-[#FAF9F6]/60">
+          Limited Time Offer Ends In
+        </span>
+        
+        <div className="flex items-center gap-4 sm:gap-6 font-mono text-2xl sm:text-3xl font-light text-[#FAF9F6]">
+          <div className="flex flex-col items-center w-12 sm:w-16">
+            <span className="font-serif font-light text-3xl sm:text-4xl text-white tracking-wide">{pad(timeLeft.hours)}</span>
+            <span className="font-sans text-[8px] uppercase tracking-[0.2em] text-[#FAF9F6]/50 mt-1 font-semibold">hours</span>
           </div>
-          <span className="font-sans text-[9px] uppercase tracking-wider text-furnizo-muted mt-1.5 font-medium">Hours</span>
-        </div>
-        <div className="flex items-center text-furnizo-muted h-14 sm:h-16 font-sans font-light">:</div>
-        <div className="flex flex-col items-center">
-          <div className="h-14 w-14 sm:h-16 sm:w-16 rounded border border-furnizo-border bg-furnizo-border/20 flex justify-center items-center font-normal shadow-sm">
-            {pad(timeLeft.minutes)}
+          
+          <div className="h-8 w-px bg-white/10" />
+          
+          <div className="flex flex-col items-center w-12 sm:w-16">
+            <span className="font-serif font-light text-3xl sm:text-4xl text-white tracking-wide">{pad(timeLeft.minutes)}</span>
+            <span className="font-sans text-[8px] uppercase tracking-[0.2em] text-[#FAF9F6]/50 mt-1 font-semibold">minutes</span>
           </div>
-          <span className="font-sans text-[9px] uppercase tracking-wider text-furnizo-muted mt-1.5 font-medium">Minutes</span>
-        </div>
-        <div className="flex items-center text-furnizo-muted h-14 sm:h-16 font-sans font-light">:</div>
-        <div className="flex flex-col items-center">
-          <div className="h-14 w-14 sm:h-16 sm:w-16 rounded border border-furnizo-border bg-furnizo-border/20 flex justify-center items-center font-normal text-furnizo-brown shadow-sm">
-            {pad(timeLeft.seconds)}
+          
+          <div className="h-8 w-px bg-white/10" />
+          
+          <div className="flex flex-col items-center w-12 sm:w-16">
+            <span className="font-serif font-light text-3xl sm:text-4xl text-[#FAF9F6] tracking-wide animate-pulse">{pad(timeLeft.seconds)}</span>
+            <span className="font-sans text-[8px] uppercase tracking-[0.2em] text-[#FAF9F6]/65 mt-1 font-bold">seconds</span>
           </div>
-          <span className="font-sans text-[9px] uppercase tracking-wider text-furnizo-muted mt-1.5 font-medium">Seconds</span>
         </div>
       </div>
     </div>
