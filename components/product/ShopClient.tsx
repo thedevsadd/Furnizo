@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Search, SlidersHorizontal, X, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Slider } from "@/components/ui/slider";
 import { Product } from "@/types";
 import ProductGrid from "./ProductGrid";
+import ProductSkeletonGrid from "./ProductSkeletonGrid";
 
 interface ShopClientProps {
   initialProducts: Product[];
@@ -38,6 +39,15 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, maxProductPrice]);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 450);
+    return () => clearTimeout(timer);
+  }, [selectedCategories, searchTerm, sortBy, priceRange]);
 
   const hasFilters =
     selectedCategories.length > 0 ||
@@ -311,7 +321,9 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
 
         {/* Product listing */}
         <div className="flex-1 min-w-0">
-          {filteredProducts.length === 0 ? (
+          {isLoading ? (
+            <ProductSkeletonGrid />
+          ) : filteredProducts.length === 0 ? (
             <div className="flex h-72 flex-col items-center justify-center text-center">
               <div className="text-5xl mb-4">🪑</div>
               <p className="font-sans text-base font-light text-furnizo-charcoal mb-1">
