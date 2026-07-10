@@ -122,8 +122,8 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} FURNIZO. All rights reserved.
           </p>
           <div className="flex gap-x-6 text-[10px] font-sans text-furnizo-muted tracking-wider">
-            <span className="cursor-pointer hover:text-furnizo-charcoal">Privacy Policy</span>
-            <span className="cursor-pointer hover:text-furnizo-charcoal">Terms of Service</span>
+            <Link href="/privacy" className="hover:text-furnizo-charcoal transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-furnizo-charcoal transition-colors">Terms & Conditions</Link>
           </div>
         </div>
 

@@ -45,9 +45,14 @@ export default function NewArrivalsPage() {
             </div>
 
             {/* Big Headline */}
-            <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-normal text-furnizo-charcoal leading-tight tracking-tight">
-              Our New Arrivals
-            </h1>
+            <div className="flex flex-col items-center select-none py-1">
+              <h1 className="font-serif text-7xl sm:text-8xl md:text-9xl font-bold tracking-widest leading-none select-none sparkle-new-large uppercase">
+                NEW
+              </h1>
+              <span className="font-sans text-[10px] font-bold uppercase tracking-[0.25em] text-furnizo-brown mt-4 block">
+                Our New Arrivals
+              </span>
+            </div>
 
             {/* Subtext */}
             <p className="font-sans text-sm sm:text-base text-furnizo-muted max-w-lg mx-auto leading-relaxed font-light">

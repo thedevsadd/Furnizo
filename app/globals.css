@@ -139,4 +139,28 @@
   ::-webkit-scrollbar-thumb:hover {
     background: #6F4423;
   }
+
+  /* Large text shimmer animation */
+  @keyframes sparkleShimmerLarge {
+    0%   { background-position: 200% center; }
+    100% { background-position: -200% center; }
+  }
+  
+  .sparkle-new-large {
+    background: linear-gradient(
+      90deg,
+      #6F4423 0%,
+      #6F4423 30%,
+      #f5c842 42%,
+      #fff9c4 50%,
+      #f5c842 58%,
+      #6F4423 70%,
+      #6F4423 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: sparkleShimmerLarge 5s linear infinite;
+  }
 }
