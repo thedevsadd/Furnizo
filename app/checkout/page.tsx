@@ -56,6 +56,17 @@ export default function CheckoutPage() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    
+    // Restrict phone field to only allow numbers, spaces, hyphens, plus, and parentheses
+    if (name === "phone") {
+      const sanitized = value.replace(/[^0-9+\-()\s]/g, "");
+      setFormData((prev) => ({
+        ...prev,
+        [name]: sanitized,
+      }));
+      return;
+    }
+
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -75,6 +86,13 @@ export default function CheckoutPage() {
       !formData.phone
     ) {
       toast.error("Please fill in all shipping details.");
+      return;
+    }
+
+    // Phone digits validation (at least 7 numbers)
+    const digitsOnly = formData.phone.replace(/\D/g, "");
+    if (digitsOnly.length < 7) {
+      toast.error("Please enter a valid phone number (at least 7 digits).");
       return;
     }
 
