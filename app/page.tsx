@@ -162,26 +162,28 @@ export default function Home() {
         </section>
 
         {/* Selected Pieces Section */}
-        <section className="py-24 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
-            <div>
-              <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-furnizo-brown">
-                Featured
-              </span>
-              <h2 className="mt-2 font-sans text-2xl font-light text-furnizo-charcoal tracking-wide">
-                Selected Pieces
-              </h2>
+        <section className="w-full bg-furnizo-charcoal py-24">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+              <div>
+                <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-furnizo-brown">
+                  Featured
+                </span>
+                <h2 className="mt-2 font-sans text-2xl font-light text-furnizo-beige tracking-wide">
+                  Selected Pieces
+                </h2>
+              </div>
+              <Link
+                href="/products"
+                className="w-fit mt-4 md:mt-0 inline-flex items-center gap-2 font-sans text-xs font-medium tracking-wider text-furnizo-brown border-b border-furnizo-brown pb-1 hover:text-furnizo-beige hover:border-furnizo-beige transition-colors"
+              >
+                Browse All Products
+                <ArrowRight size={12} />
+              </Link>
             </div>
-            <Link
-              href="/products"
-              className="w-fit mt-4 md:mt-0 inline-flex items-center gap-2 font-sans text-xs font-medium tracking-wider text-furnizo-brown border-b border-furnizo-brown pb-1 hover:text-furnizo-charcoal hover:border-furnizo-charcoal transition-colors"
-            >
-              Browse All Products
-              <ArrowRight size={12} />
-            </Link>
-          </div>
 
-          <ProductGrid products={featuredProducts} />
+            <ProductGrid products={featuredProducts} darkMode />
+          </div>
         </section>
       </main>
 

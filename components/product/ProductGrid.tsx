@@ -6,6 +6,7 @@ import ProductCard from "./ProductCard";
 
 interface ProductGridProps {
   products: Product[];
+  darkMode?: boolean;
 }
 
 const containerVariants = {
@@ -18,7 +19,7 @@ const containerVariants = {
   },
 };
 
-export default function ProductGrid({ products }: ProductGridProps) {
+export default function ProductGrid({ products, darkMode = false }: ProductGridProps) {
   return (
     <motion.div
       variants={containerVariants}
@@ -27,7 +28,7 @@ export default function ProductGrid({ products }: ProductGridProps) {
       className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-10"
     >
       {products.map((product, index) => (
-        <ProductCard key={product.id} product={product} index={index} />
+        <ProductCard key={product.id} product={product} index={index} darkMode={darkMode} />
       ))}
     </motion.div>
   );

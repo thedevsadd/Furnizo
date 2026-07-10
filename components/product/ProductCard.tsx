@@ -15,6 +15,7 @@ import StockBadge from "./StockBadge";
 interface ProductCardProps {
   product: Product;
   index?: number;
+  darkMode?: boolean;
 }
 
 const cardVariants = {
@@ -26,7 +27,7 @@ const cardVariants = {
   },
 };
 
-export default function ProductCard({ product, index = 0 }: ProductCardProps) {
+export default function ProductCard({ product, index = 0, darkMode = false }: ProductCardProps) {
   const [mounted, setMounted] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [wishlistBounce, setWishlistBounce] = useState(false);
@@ -143,10 +144,10 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
 
         {/* Info */}
         <div className="mt-3.5 flex flex-col flex-grow">
-          <p className="text-[9px] font-sans font-semibold uppercase tracking-[0.18em] text-furnizo-muted/80">
+          <p className={`text-[9px] font-sans font-semibold uppercase tracking-[0.18em] ${darkMode ? "text-furnizo-beige/50" : "text-furnizo-muted/80"}`}>
             {product.category}
           </p>
-          <h3 className="mt-1 font-sans text-sm font-medium text-furnizo-charcoal line-clamp-1 group-hover:text-furnizo-brown transition-colors">
+          <h3 className={`mt-1 font-sans text-sm font-medium line-clamp-1 transition-colors ${darkMode ? "text-furnizo-beige group-hover:text-furnizo-brown" : "text-furnizo-charcoal group-hover:text-furnizo-brown"}`}>
             {product.name}
           </h3>
           <div className="mt-1 flex items-baseline gap-2">
@@ -154,7 +155,7 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
               ${product.price.toLocaleString()}
             </span>
             {product.originalPrice && (
-              <span className="font-sans text-xs font-light text-furnizo-muted/70 line-through">
+              <span className={`font-sans text-xs font-light line-through ${darkMode ? "text-furnizo-beige/40" : "text-furnizo-muted/70"}`}>
                 ${product.originalPrice.toLocaleString()}
               </span>
             )}
