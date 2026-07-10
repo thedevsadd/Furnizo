@@ -34,7 +34,7 @@ export default function Home() {
           
           <div className="absolute inset-0 bg-gradient-to-r from-furnizo-beige/40 via-transparent to-transparent z-10" />
 
-          <div className="relative z-20 mx-auto flex h-full max-w-7xl flex-col justify-center px-4 sm:px-6 lg:px-8">
+          <div className="relative z-20 flex h-full w-full flex-col justify-center px-6 sm:px-12 md:px-20 lg:px-24 xl:px-32">
             <div className="max-w-xl space-y-6">
               <span className="font-sans text-xs font-semibold uppercase tracking-[0.25em] text-furnizo-brown">
                 New Collection
