@@ -91,12 +91,12 @@ export default function Navbar() {
 
   const menuLinks = [
     { name: "Shop", href: "/products" },
-    { name: "Offers", href: "/products?tag=offers" },
-    { name: "Collections", href: "/products" },
-    { name: "About", href: "/products" },
+    { name: "Offers", href: "/offers" },
+    { name: "Collections", href: "/collections" },
+    { name: "About", href: "/about" },
   ];
 
-  const categories = ["Chairs", "Tables", "Sofas", "Lighting", "Storage"];
+  const categories = ["Chair", "Coffee Table", "Shelf", "Side Table", "Table", "Wardrobe"];
   const showScrolled = isScrolled && !mobileMenuOpen;
 
   return (

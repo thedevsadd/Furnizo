@@ -3,6 +3,8 @@ import Image from "next/image";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import ProductGrid from "@/components/product/ProductGrid";
+import CuratedCategories from "@/components/product/CuratedCategories";
+import NewArrivalsCarousel from "@/components/product/NewArrivalsCarousel";
 import { products } from "@/data/products";
 import { ArrowRight } from "lucide-react";
 
@@ -10,28 +12,8 @@ export default function Home() {
   // Get 4 featured bestsellers
   const featuredProducts = products.slice(0, 4);
 
-  const categories = [
-    {
-      name: "Chairs",
-      image: "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?q=80&w=400&auto=format&fit=crop",
-      href: "/products?category=Chairs",
-    },
-    {
-      name: "Tables",
-      image: "https://images.unsplash.com/photo-1577140917170-285929fb55b7?q=80&w=400&auto=format&fit=crop",
-      href: "/products?category=Tables",
-    },
-    {
-      name: "Sofas",
-      image: "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?q=80&w=400&auto=format&fit=crop",
-      href: "/products?category=Sofas",
-    },
-    {
-      name: "Lighting",
-      image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?q=80&w=400&auto=format&fit=crop",
-      href: "/products?category=Lighting",
-    },
-  ];
+  // Get new arrivals
+  const newProducts = products.filter((p) => p.isNew);
 
   return (
     <div className="flex flex-col min-h-screen bg-furnizo-beige">
@@ -90,36 +72,19 @@ export default function Home() {
             </div>
             <Link
               href="/products"
-              className="mt-4 md:mt-0 inline-flex items-center gap-2 font-sans text-xs font-medium tracking-wider text-furnizo-brown border-b border-furnizo-brown pb-1 hover:text-furnizo-charcoal hover:border-furnizo-charcoal transition-colors"
+              className="w-fit mt-4 md:mt-0 inline-flex items-center gap-2 font-sans text-xs font-medium tracking-wider text-furnizo-brown border-b border-furnizo-brown pb-1 hover:text-furnizo-charcoal hover:border-furnizo-charcoal transition-colors"
             >
               View Shop
               <ArrowRight size={12} />
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
-            {categories.map((category) => (
-              <Link
-                key={category.name}
-                href={category.href}
-                className="group relative aspect-[3/4] overflow-hidden rounded bg-furnizo-border/30"
-              >
-                <Image
-                  src={category.image}
-                  alt={category.name}
-                  fill
-                  className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
-                  sizes="(max-width: 768px) 50vw, 25vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-furnizo-charcoal/60 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
-                <div className="absolute bottom-4 left-4 right-4">
-                  <h3 className="font-sans text-sm font-medium tracking-wider text-furnizo-beige uppercase">
-                    {category.name}
-                  </h3>
-                </div>
-              </Link>
-            ))}
-          </div>
+          <CuratedCategories />
+        </section>
+
+        {/* New Arrivals Section */}
+        <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <NewArrivalsCarousel products={newProducts} />
         </section>
 
         {/* Brand Narrative Banner */}
@@ -150,7 +115,7 @@ export default function Home() {
             </div>
             <Link
               href="/products"
-              className="mt-4 md:mt-0 inline-flex items-center gap-2 font-sans text-xs font-medium tracking-wider text-furnizo-brown border-b border-furnizo-brown pb-1 hover:text-furnizo-charcoal hover:border-furnizo-charcoal transition-colors"
+              className="w-fit mt-4 md:mt-0 inline-flex items-center gap-2 font-sans text-xs font-medium tracking-wider text-furnizo-brown border-b border-furnizo-brown pb-1 hover:text-furnizo-charcoal hover:border-furnizo-charcoal transition-colors"
             >
               Browse All Products
               <ArrowRight size={12} />

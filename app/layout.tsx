@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
 import { Toaster } from "sonner";
 import Initializer from "@/components/shared/Initializer";
+import SmoothScroll from "@/components/providers/SmoothScroll";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -26,8 +27,10 @@ export default function RootLayout({
       className={`${manrope.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-furnizo-beige text-furnizo-muted" suppressHydrationWarning>
-        <Initializer />
-        {children}
+        <SmoothScroll>
+          <Initializer />
+          {children}
+        </SmoothScroll>
         <Toaster 
           position="bottom-right" 
           toastOptions={{

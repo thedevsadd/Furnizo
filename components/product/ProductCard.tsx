@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Heart, ShoppingBag } from "lucide-react";
@@ -37,7 +37,9 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
   const getStock = useStockStore((state) => state.getStock);
 
   // Hydration-safe mount
-  useState(() => { setMounted(true); });
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const stock = mounted ? getStock(product.id) : product.stock;
   const isOutOfStock = stock <= 0;
 
@@ -101,9 +103,14 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
             </motion.div>
           </AnimatePresence>
 
-          {/* Stock badge */}
-          <div className="absolute top-3 left-3 z-10">
+          {/* Stock badge & Sale badge */}
+          <div className="absolute top-3 left-3 z-10 flex flex-col items-start gap-1">
             <StockBadge stock={stock} />
+            {product.originalPrice && (
+              <span className="font-sans text-[8px] font-bold uppercase tracking-[0.15em] text-white bg-furnizo-brown px-2 py-1 rounded shadow-sm">
+                Save ${product.originalPrice - product.price}
+              </span>
+            )}
           </div>
 
           {/* Wishlist button */}
@@ -142,9 +149,16 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
           <h3 className="mt-1 font-sans text-sm font-medium text-furnizo-charcoal line-clamp-1 group-hover:text-furnizo-brown transition-colors">
             {product.name}
           </h3>
-          <p className="mt-1 font-sans text-sm font-light text-furnizo-brown">
-            ${product.price.toLocaleString()}
-          </p>
+          <div className="mt-1 flex items-baseline gap-2">
+            <span className="font-sans text-sm font-medium text-furnizo-brown">
+              ${product.price.toLocaleString()}
+            </span>
+            {product.originalPrice && (
+              <span className="font-sans text-xs font-light text-furnizo-muted/70 line-through">
+                ${product.originalPrice.toLocaleString()}
+              </span>
+            )}
+          </div>
         </div>
       </Link>
     </motion.div>

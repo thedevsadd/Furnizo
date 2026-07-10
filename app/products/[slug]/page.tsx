@@ -59,7 +59,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
     <div className="flex flex-col min-h-screen bg-furnizo-beige">
       <Navbar />
 
-      <main className="flex-grow py-16 mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8">
+      <main className="flex-grow pt-6 pb-16 mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8">
         <ProductDetailsClient
           product={product}
           relatedProducts={relatedProducts}

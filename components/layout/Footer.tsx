@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -10,11 +11,15 @@ export default function Footer() {
           
           {/* Brand Info */}
           <div className="space-y-4">
-            <Link href="/" className="flex items-center gap-2">
-              <span className="h-5 w-5 rounded-full bg-furnizo-brown"></span>
-              <span className="font-sans text-lg font-light tracking-[0.2em] text-furnizo-charcoal">
-                FURNIZO
-              </span>
+            <Link href="/" className="flex items-center">
+              <Image
+                src="/Furnizo-Assets/Furnizo-logo-Main.png"
+                alt="Furnizo Logo"
+                width={120}
+                height={31}
+                className="h-8 w-auto object-contain"
+                priority={false}
+              />
             </Link>
             <p className="font-sans text-xs text-furnizo-muted leading-relaxed max-w-xs">
               Premium, architectural furniture designed with pure lines and structural longevity in mind.
@@ -33,23 +38,23 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=Chairs" className="hover:text-furnizo-brown transition-colors">
-                  Chairs
+                <Link href="/products?category=Chair" className="hover:text-furnizo-brown transition-colors">
+                  Chair
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=Coffee+Tables" className="hover:text-furnizo-brown transition-colors">
-                  Coffee Tables
+                <Link href="/products?category=Coffee+Table" className="hover:text-furnizo-brown transition-colors">
+                  Coffee Table
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=Wardrobes" className="hover:text-furnizo-brown transition-colors">
-                  Wardrobes
+                <Link href="/products?category=Wardrobe" className="hover:text-furnizo-brown transition-colors">
+                  Wardrobe
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=Shelves" className="hover:text-furnizo-brown transition-colors">
-                  Shelves
+                <Link href="/products?category=Shelf" className="hover:text-furnizo-brown transition-colors">
+                  Shelf
                 </Link>
               </li>
             </ul>
@@ -62,24 +67,24 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2.5 text-xs font-sans text-furnizo-muted">
               <li>
-                <Link href="/orders" className="hover:text-furnizo-brown transition-colors">
+                <Link href="/order-status" className="hover:text-furnizo-brown transition-colors">
                   Order Status
                 </Link>
               </li>
               <li>
-                <span className="cursor-default hover:text-furnizo-charcoal transition-colors">
+                <Link href="/shipping-returns" className="hover:text-furnizo-brown transition-colors">
                   Shipping & Returns
-                </span>
+                </Link>
               </li>
               <li>
-                <span className="cursor-default hover:text-furnizo-charcoal transition-colors">
+                <Link href="/care-guide" className="hover:text-furnizo-brown transition-colors">
                   Care Guide
-                </span>
+                </Link>
               </li>
               <li>
-                <span className="cursor-default hover:text-furnizo-charcoal transition-colors">
+                <Link href="/contact" className="hover:text-furnizo-brown transition-colors">
                   Contact Us
-                </span>
+                </Link>
               </li>
             </ul>
           </div>

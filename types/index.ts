@@ -5,11 +5,13 @@ export interface Product {
   category: string;
   tags: string[];
   price: number;
+  originalPrice?: number;
   description: string;
   imageUrls: string[];
   stock: number;
   dimensions?: string;
   material?: string;
+  isNew?: boolean;
 }
 
 export interface CartItem {
