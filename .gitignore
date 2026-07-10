@@ -40,9 +40,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# local assets
+# local assets (root-level duplicate, not needed for Next.js)
 /Furnizo-Assets/
-/public/Furnizo-Assets/
 
 # local-only code blocks
 *Local.tsx
