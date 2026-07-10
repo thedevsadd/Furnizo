@@ -17,6 +17,17 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { CustomerInfo, Order } from "@/types";
 
+const californiaCities = [
+  { name: "Los Angeles", zip: "90001" },
+  { name: "San Francisco", zip: "94102" },
+  { name: "San Diego", zip: "92101" },
+  { name: "Beverly Hills", zip: "90210" },
+  { name: "Santa Monica", zip: "90401" },
+  { name: "Palo Alto", zip: "94301" },
+  { name: "Malibu", zip: "90265" },
+  { name: "San Jose", zip: "95112" },
+];
+
 export default function CheckoutPage() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
@@ -285,32 +296,59 @@ export default function CheckoutPage() {
                     />
                   </div>
 
-                  {/* City & Zip Code */}
-                  <div className="grid grid-cols-2 gap-4">
+                  {/* City, State & Zip Code Row */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    {/* City Selection */}
                     <div className="space-y-2">
                       <Label htmlFor="city" className="font-sans text-xs text-furnizo-charcoal uppercase tracking-wider">
                         City
                       </Label>
-                      <Input
+                      <select
                         id="city"
                         name="city"
-                        type="text"
-                        placeholder="Portland"
                         value={formData.city}
-                        onChange={handleInputChange}
+                        onChange={(e) => {
+                          const cityName = e.target.value;
+                          const cityObj = californiaCities.find(c => c.name === cityName);
+                          setFormData(prev => ({
+                            ...prev,
+                            city: cityName,
+                            postalCode: cityObj ? cityObj.zip : prev.postalCode
+                          }));
+                        }}
                         required
-                        className="bg-transparent border-furnizo-border rounded font-sans text-sm h-11 focus-visible:ring-furnizo-brown"
+                        className="w-full bg-transparent border border-furnizo-border rounded font-sans text-sm h-11 px-3 focus:outline-hidden focus:border-furnizo-brown text-furnizo-charcoal"
+                      >
+                        <option value="" disabled className="text-furnizo-muted">Select City</option>
+                        {californiaCities.map(c => (
+                          <option key={c.name} value={c.name} className="text-furnizo-charcoal">{c.name}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* State (Fixed) */}
+                    <div className="space-y-2">
+                      <Label className="font-sans text-xs text-furnizo-charcoal uppercase tracking-wider">
+                        State
+                      </Label>
+                      <Input
+                        type="text"
+                        value="California (CA)"
+                        disabled
+                        className="bg-furnizo-border/10 border-furnizo-border rounded font-sans text-sm h-11 text-furnizo-muted/70 cursor-not-allowed select-none"
                       />
                     </div>
+
+                    {/* ZIP Code */}
                     <div className="space-y-2">
                       <Label htmlFor="postalCode" className="font-sans text-xs text-furnizo-charcoal uppercase tracking-wider">
-                        Postal Code
+                        ZIP / Postal Code
                       </Label>
                       <Input
                         id="postalCode"
                         name="postalCode"
                         type="text"
-                        placeholder="97201"
+                        placeholder="90001"
                         value={formData.postalCode}
                         onChange={handleInputChange}
                         required

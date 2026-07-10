@@ -6,7 +6,7 @@ import ProductGrid from "@/components/product/ProductGrid";
 import CuratedCategories from "@/components/product/CuratedCategories";
 import NewArrivalsCarousel from "@/components/product/NewArrivalsCarousel";
 import { products } from "@/data/products";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Trees, ShieldCheck, Sparkles, MapPin } from "lucide-react";
 
 export default function Home() {
   // Get 4 featured bestsellers
@@ -87,17 +87,76 @@ export default function Home() {
           <NewArrivalsCarousel products={newProducts} />
         </section>
 
-        {/* Brand Narrative Banner */}
-        <section className="border-y border-furnizo-border bg-furnizo-border/10 py-20 text-center">
-          <div className="mx-auto max-w-3xl px-4">
-            <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-furnizo-brown">
-              Our Vision
+        {/* Why Choose Us Section */}
+        <section className="border-y border-furnizo-border bg-furnizo-border/10 py-24">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+            <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.25em] text-furnizo-brown block">
+              Why Choose Us
             </span>
-            <p className="mt-6 font-sans text-lg sm:text-xl font-light leading-relaxed text-furnizo-charcoal italic">
-              "We believe that furniture should speak softly. Each design is stripped of unnecessary detail to allow structural integrity, organic grain patterns, and premium material textures to form the character of your space."
-            </p>
-            <div className="mt-8 flex justify-center">
-              <span className="h-1 w-8 rounded-full bg-furnizo-brown/40"></span>
+            <h2 className="mt-3 font-sans text-3xl font-light text-furnizo-charcoal tracking-wide">
+              The Furnizo Standard
+            </h2>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-16 text-left">
+              {/* Point 1 */}
+              <div className="bg-white/50 backdrop-blur-xs border border-furnizo-border/60 rounded-xl p-6 hover:-translate-y-1 transition-all duration-300 shadow-xs flex flex-col justify-between h-full">
+                <div className="space-y-4">
+                  <div className="h-10 w-10 rounded-lg bg-furnizo-brown/10 flex items-center justify-center text-furnizo-brown">
+                    <Trees size={20} />
+                  </div>
+                  <h3 className="font-sans text-sm font-semibold text-furnizo-charcoal uppercase tracking-wider">
+                    Solid Woods Only
+                  </h3>
+                  <p className="font-sans text-xs text-furnizo-muted leading-relaxed font-light">
+                    We select and utilize only high-quality, sustainably harvested solid oak, ash, and walnut. No composite boards or cheap veneers.
+                  </p>
+                </div>
+              </div>
+
+              {/* Point 2 */}
+              <div className="bg-white/50 backdrop-blur-xs border border-furnizo-border/60 rounded-xl p-6 hover:-translate-y-1 transition-all duration-300 shadow-xs flex flex-col justify-between h-full">
+                <div className="space-y-4">
+                  <div className="h-10 w-10 rounded-lg bg-furnizo-brown/10 flex items-center justify-center text-furnizo-brown">
+                    <Sparkles size={20} />
+                  </div>
+                  <h3 className="font-sans text-sm font-semibold text-furnizo-charcoal uppercase tracking-wider">
+                    Rust-Free Hardware
+                  </h3>
+                  <p className="font-sans text-xs text-furnizo-muted leading-relaxed font-light">
+                    Every screw, bracket, and hinge is crafted from 100% rust-free Grade 304 stainless steel, built to resist moisture and wear.
+                  </p>
+                </div>
+              </div>
+
+              {/* Point 3 */}
+              <div className="bg-white/50 backdrop-blur-xs border border-furnizo-border/60 rounded-xl p-6 hover:-translate-y-1 transition-all duration-300 shadow-xs flex flex-col justify-between h-full">
+                <div className="space-y-4">
+                  <div className="h-10 w-10 rounded-lg bg-furnizo-brown/10 flex items-center justify-center text-furnizo-brown">
+                    <ShieldCheck size={20} />
+                  </div>
+                  <h3 className="font-sans text-sm font-semibold text-furnizo-charcoal uppercase tracking-wider">
+                    100% Safe Finishes
+                  </h3>
+                  <p className="font-sans text-xs text-furnizo-muted leading-relaxed font-light">
+                    We exclusively coat our designs with non-toxic, eco-certified organic oils and water-based sealants safe for families.
+                  </p>
+                </div>
+              </div>
+
+              {/* Point 4 */}
+              <div className="bg-white/50 backdrop-blur-xs border border-furnizo-border/60 rounded-xl p-6 hover:-translate-y-1 transition-all duration-300 shadow-xs flex flex-col justify-between h-full">
+                <div className="space-y-4">
+                  <div className="h-10 w-10 rounded-lg bg-furnizo-brown/10 flex items-center justify-center text-furnizo-brown">
+                    <MapPin size={20} />
+                  </div>
+                  <h3 className="font-sans text-sm font-semibold text-furnizo-charcoal uppercase tracking-wider">
+                    California Hubs
+                  </h3>
+                  <p className="font-sans text-xs text-furnizo-muted leading-relaxed font-light">
+                    With over 50+ showrooms and logistics hubs across California, we offer white-glove inside delivery and local support.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </section>
