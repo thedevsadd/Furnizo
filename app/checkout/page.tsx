@@ -24,6 +24,7 @@ export default function CheckoutPage() {
   // Payment States
   const [paymentMethod, setPaymentMethod] = useState<"cod" | "card">("cod");
   const [isPaying, setIsPaying] = useState(false);
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   const [cardDetails, setCardDetails] = useState({
     name: "",
     number: "",
@@ -147,31 +148,35 @@ export default function CheckoutPage() {
     const randomId = Math.floor(100000 + Math.random() * 900000);
     const orderId = `ORD-${randomId}`;
 
-    // 5. Decrement Stock for all products
-    cartItems.forEach((item) => {
-      decrementStock(item.product.id, item.quantity);
-    });
+    setIsPlacingOrder(true);
 
-    // 6. Create Order
-    const newOrder: Order = {
-      id: orderId,
-      items: [...cartItems],
-      total: totalOrderValue,
-      date: new Date().toISOString(),
-      customerInfo: formData,
-      status: "Confirmed",
-    };
+    setTimeout(() => {
+      // 5. Decrement Stock for all products
+      cartItems.forEach((item) => {
+        decrementStock(item.product.id, item.quantity);
+      });
 
-    addOrder(newOrder);
+      // 6. Create Order
+      const newOrder: Order = {
+        id: orderId,
+        items: [...cartItems],
+        total: totalOrderValue,
+        date: new Date().toISOString(),
+        customerInfo: formData,
+        status: "Confirmed",
+      };
 
-    // 7. Clear Cart
-    clearCart();
+      addOrder(newOrder);
 
-    // 8. Redirect
-    toast.success("Order placed successfully!", {
-      icon: "🤎",
-    });
-    router.push(`/orders/${orderId}`);
+      // 7. Clear Cart
+      clearCart();
+
+      // 8. Redirect
+      toast.success("Order placed successfully!", {
+        icon: "🤎",
+      });
+      router.push(`/orders/${orderId}`);
+    }, 1500);
   };
 
   if (!mounted) {
@@ -575,6 +580,20 @@ export default function CheckoutPage() {
           </div>
         )}
       </main>
+
+      {isPlacingOrder && (
+        <div className="fixed inset-0 bg-furnizo-beige/95 backdrop-blur-xs flex flex-col justify-center items-center z-50 animate-fadeIn">
+          <div className="space-y-4 text-center">
+            <div className="h-10 w-10 border-2 border-furnizo-brown border-t-transparent rounded-full animate-spin mx-auto" />
+            <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.25em] text-furnizo-brown block animate-pulse">
+              Securing Your Order
+            </span>
+            <p className="font-sans text-xs text-furnizo-muted max-w-xs mx-auto leading-relaxed px-4">
+              We are verifying stock levels and generating your invoice receipt. Please do not close this window.
+            </p>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </div>

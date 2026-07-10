@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { use, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { CheckCircle2, ChevronRight, ShoppingBag } from "lucide-react";
@@ -11,15 +11,17 @@ import { useOrderStore } from "@/lib/store/orderStore";
 import { Button } from "@/components/ui/button";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     orderId: string;
-  };
+  }>;
 }
 
 export default function OrderConfirmationPage({ params }: PageProps) {
+  const unwrappedParams = use(params);
+  const orderId = unwrappedParams.orderId;
   const [mounted, setMounted] = useState(false);
   const getOrderById = useOrderStore((state) => state.getOrderById);
-  const order = getOrderById(params.orderId);
+  const order = getOrderById(orderId);
 
   useEffect(() => {
     setMounted(true);
