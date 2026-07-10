@@ -43,3 +43,6 @@ next-env.d.ts
 # local assets
 /Furnizo-Assets/
 /public/Furnizo-Assets/
+
+# local-only code blocks
+*Local.tsx

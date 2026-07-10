@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { ArrowLeft, CreditCard, Lock, ChevronDown } from "lucide-react";
@@ -27,6 +28,13 @@ const californiaCities = [
   { name: "Malibu", zip: "90265" },
   { name: "San Jose", zip: "95112" },
 ];
+
+const CardPaymentLocal = dynamic(
+  () => import("@/components/checkout/CardPaymentLocal").catch(() => () => null),
+  { ssr: false }
+);
+
+const showCardPayment = process.env.NEXT_PUBLIC_ENABLE_CARD_PAYMENTS === "true";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -415,7 +423,7 @@ export default function CheckoutPage() {
                       Payment Method
                     </h3>
                     
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className={showCardPayment ? "grid grid-cols-1 sm:grid-cols-2 gap-4" : "grid grid-cols-1 gap-4"}>
                       {/* Cash on Delivery option */}
                       <label className={`flex items-start justify-between p-4 border rounded-lg cursor-pointer transition-all ${
                         paymentMethod === "cod" 
@@ -439,128 +447,55 @@ export default function CheckoutPage() {
                       </label>
 
                       {/* Card Payment option */}
-                      <label className={`flex flex-col p-4 border rounded-lg cursor-pointer transition-all ${
-                        paymentMethod === "card" 
-                          ? "border-furnizo-brown bg-furnizo-brown/5 ring-1 ring-furnizo-brown" 
-                          : "border-furnizo-border bg-white hover:border-furnizo-muted"
-                      }`}>
-                        <div className="flex items-start justify-between w-full">
-                          <div className="flex gap-3">
-                            <input
-                              type="radio"
-                              name="paymentMethod"
-                              value="card"
-                              checked={paymentMethod === "card"}
-                              onChange={() => setPaymentMethod("card")}
-                              className="mt-0.5 text-furnizo-brown focus:ring-furnizo-brown"
-                            />
-                            <div className="space-y-0.5">
-                              <span className="font-sans text-xs font-semibold text-furnizo-charcoal">Credit / Debit Card</span>
-                              <p className="font-sans text-[10px] text-furnizo-muted">Pay securely with card.</p>
+                      {showCardPayment && (
+                        <label className={`flex flex-col p-4 border rounded-lg cursor-pointer transition-all ${
+                          paymentMethod === "card" 
+                            ? "border-furnizo-brown bg-furnizo-brown/5 ring-1 ring-furnizo-brown" 
+                            : "border-furnizo-border bg-white hover:border-furnizo-muted"
+                        }`}>
+                          <div className="flex items-start justify-between w-full">
+                            <div className="flex gap-3">
+                              <input
+                                type="radio"
+                                name="paymentMethod"
+                                value="card"
+                                checked={paymentMethod === "card"}
+                                onChange={() => setPaymentMethod("card")}
+                                className="mt-0.5 text-furnizo-brown focus:ring-furnizo-brown"
+                              />
+                              <div className="space-y-0.5">
+                                <span className="font-sans text-xs font-semibold text-furnizo-charcoal">Credit / Debit Card</span>
+                                <p className="font-sans text-[10px] text-furnizo-muted">Pay securely with card.</p>
+                              </div>
+                            </div>
+
+                            {/* Card logos */}
+                            <div className="flex gap-1 items-center">
+                              {/* Visa */}
+                              <svg className="w-8 h-5 rounded border border-gray-200 bg-white p-0.5" viewBox="0 0 24 15" fill="none">
+                                <path d="M10.5 12h1.8l1.1-7H11.6l-1.1 7zm7.6-6.8c-.3-.2-.8-.4-1.4-.4-1.5 0-2.5.8-2.5 1.9 0 .8.8 1.3 1.3 1.6.6.3.8.5.8.7 0 .4-.5.6-1 .6-.6 0-1-.2-1.3-.4l-.2-.1-.2 1.4c.4.2.9.3 1.6.3 1.6 0 2.6-.8 2.6-2 0-.8-.5-1.2-1.6-1.7-.5-.3-.9-.5-.9-.8 0-.3.3-.5.8-.5.4 0 .8.1 1.1.3l.1.1.2-1.4zm-4.7.1l-1.3 4.8-.6-3.2-.2-1.1c-.2-.5-.6-.9-1.1-1.1H8.3l-.1.1.1.1c.4.2.9.5 1.2.9l1.4 5.3h1.9l2.8-7h-1.9zm8 .7c-.1-.3-.4-.5-.7-.5h-1.5c-.2 0-.4.1-.5.3l-2.1 5h1.9l.4-.9h2.3l.2.9h1.7l-1.7-4.8zm-1.8 2.5l.7-2 1.1 2h-1.8z" fill="#1A1F71"/>
+                              </svg>
+                              {/* Mastercard */}
+                              <svg className="w-8 h-5 rounded border border-gray-200 bg-white p-0.5" viewBox="0 0 24 15" fill="none">
+                                <circle cx="9" cy="7.5" r="4.5" fill="#EB001B" opacity="0.9"/>
+                                <circle cx="15" cy="7.5" r="4.5" fill="#F79E1B" opacity="0.9"/>
+                                <path d="M12 4.6a4.5 4.5 0 010 5.8 4.5 4.5 0 010-5.8z" fill="#FF5F00"/>
+                              </svg>
+                              {/* Amex */}
+                              <svg className="w-8 h-5 rounded border border-gray-200 bg-white p-0.5" viewBox="0 0 24 15" fill="none">
+                                <rect width="24" height="15" rx="1" fill="#0070CD"/>
+                                <path d="M4 11V4h2.5c.8 0 1.2.3 1.2.8v.5c0 .5-.3.8-.7.9.6.2.7.5.7 1v2H6.3V8.8c0-.3-.1-.5-.4-.5H5.4v2.7H4zm1.4-3.5h.7c.3 0 .4-.1.4-.3v-.3c0-.2-.1-.3-.4-.3h-.7v.9zm4.2 3.5V4h1.1l1 2.9 1-2.9h1.1v7h-1.3V6.2L11 8.8H10L8.7 6.2v4.8H9.6zm7.2 0V4h3.1v1.1h-2v1.6h1.8v1.1H18v1.8h2.1V11h-3.2z" fill="white"/>
+                              </svg>
                             </div>
                           </div>
-
-                          {/* Card logos */}
-                          <div className="flex gap-1 items-center">
-                            {/* Visa */}
-                            <svg className="w-8 h-5 rounded border border-gray-200 bg-white p-0.5" viewBox="0 0 24 15" fill="none">
-                              <path d="M10.5 12h1.8l1.1-7H11.6l-1.1 7zm7.6-6.8c-.3-.2-.8-.4-1.4-.4-1.5 0-2.5.8-2.5 1.9 0 .8.8 1.3 1.3 1.6.6.3.8.5.8.7 0 .4-.5.6-1 .6-.6 0-1-.2-1.3-.4l-.2-.1-.2 1.4c.4.2.9.3 1.6.3 1.6 0 2.6-.8 2.6-2 0-.8-.5-1.2-1.6-1.7-.5-.3-.9-.5-.9-.8 0-.3.3-.5.8-.5.4 0 .8.1 1.1.3l.1.1.2-1.4zm-4.7.1l-1.3 4.8-.6-3.2-.2-1.1c-.2-.5-.6-.9-1.1-1.1H8.3l-.1.1.1.1c.4.2.9.5 1.2.9l1.4 5.3h1.9l2.8-7h-1.9zm8 .7c-.1-.3-.4-.5-.7-.5h-1.5c-.2 0-.4.1-.5.3l-2.1 5h1.9l.4-.9h2.3l.2.9h1.7l-1.7-4.8zm-1.8 2.5l.7-2 1.1 2h-1.8z" fill="#1A1F71"/>
-                            </svg>
-                            {/* Mastercard */}
-                            <svg className="w-8 h-5 rounded border border-gray-200 bg-white p-0.5" viewBox="0 0 24 15" fill="none">
-                              <circle cx="9" cy="7.5" r="4.5" fill="#EB001B" opacity="0.9"/>
-                              <circle cx="15" cy="7.5" r="4.5" fill="#F79E1B" opacity="0.9"/>
-                              <path d="M12 4.6a4.5 4.5 0 010 5.8 4.5 4.5 0 010-5.8z" fill="#FF5F00"/>
-                            </svg>
-                            {/* Amex */}
-                            <svg className="w-8 h-5 rounded border border-gray-200 bg-white p-0.5" viewBox="0 0 24 15" fill="none">
-                              <rect width="24" height="15" rx="1" fill="#0070CD"/>
-                              <path d="M4 11V4h2.5c.8 0 1.2.3 1.2.8v.5c0 .5-.3.8-.7.9.6.2.7.5.7 1v2H6.3V8.8c0-.3-.1-.5-.4-.5H5.4v2.7H4zm1.4-3.5h.7c.3 0 .4-.1.4-.3v-.3c0-.2-.1-.3-.4-.3h-.7v.9zm4.2 3.5V4h1.1l1 2.9 1-2.9h1.1v7h-1.3V6.2L11 8.8H10L8.7 6.2v4.8H9.6zm7.2 0V4h3.1v1.1h-2v1.6h1.8v1.1H18v1.8h2.1V11h-3.2z" fill="white"/>
-                            </svg>
-                          </div>
-                        </div>
-                      </label>
+                        </label>
+                      )}
                     </div>
                   </div>
 
                   {/* Card Details Panel */}
-                  {paymentMethod === "card" && (
-                    <div className="border border-furnizo-border bg-white rounded-lg p-5 space-y-4 mt-6 animate-fadeIn">
-                      <div className="flex items-center justify-between">
-                        <span className="font-sans text-[10px] font-semibold uppercase tracking-wider text-furnizo-muted">Simulated Transaction Details</span>
-                        <span className="flex items-center gap-1 text-[9px] font-sans text-furnizo-muted">
-                          <Lock size={10} /> Secure Checkout
-                        </span>
-                      </div>
-                      
-                      {/* Cardholder Name */}
-                      <div className="space-y-1.5">
-                        <Label htmlFor="cardName" className="font-sans text-[10px] text-furnizo-charcoal uppercase tracking-wider">Cardholder Name</Label>
-                        <Input
-                          id="cardName"
-                          type="text"
-                          placeholder="Jane Doe"
-                          value={cardDetails.name}
-                          onChange={(e) => setCardDetails(prev => ({ ...prev, name: e.target.value }))}
-                          required
-                          className="bg-transparent border-furnizo-border rounded font-sans text-xs h-10 focus-visible:ring-furnizo-brown"
-                        />
-                      </div>
-
-                      {/* Card Number */}
-                      <div className="space-y-1.5">
-                        <Label htmlFor="cardNumber" className="font-sans text-[10px] text-furnizo-charcoal uppercase tracking-wider">Card Number</Label>
-                        <Input
-                          id="cardNumber"
-                          type="text"
-                          placeholder="4111 2222 3333 4444"
-                          maxLength={19}
-                          value={cardDetails.number}
-                          onChange={(e) => {
-                            const val = e.target.value.replace(/\s?/g, '').replace(/(\d{4})/g, '$1 ').trim();
-                            setCardDetails(prev => ({ ...prev, number: val }));
-                          }}
-                          required
-                          className="bg-transparent border-furnizo-border rounded font-sans text-xs h-10 focus-visible:ring-furnizo-brown"
-                        />
-                      </div>
-
-                      {/* Expiry & CVC */}
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-1.5">
-                          <Label htmlFor="cardExpiry" className="font-sans text-[10px] text-furnizo-charcoal uppercase tracking-wider">Expiry Date</Label>
-                          <Input
-                            id="cardExpiry"
-                            type="text"
-                            placeholder="MM/YY"
-                            maxLength={5}
-                            value={cardDetails.expiry}
-                            onChange={(e) => {
-                              let val = e.target.value.replace(/\D/g, "");
-                              if (val.length > 2) {
-                                val = `${val.slice(0, 2)}/${val.slice(2, 4)}`;
-                              }
-                              setCardDetails(prev => ({ ...prev, expiry: val }));
-                            }}
-                            required
-                            className="bg-transparent border-furnizo-border rounded font-sans text-xs h-10 focus-visible:ring-furnizo-brown"
-                          />
-                        </div>
-                        <div className="space-y-1.5">
-                          <Label htmlFor="cardCvc" className="font-sans text-[10px] text-furnizo-charcoal uppercase tracking-wider">CVC</Label>
-                          <Input
-                            id="cardCvc"
-                            type="password"
-                            placeholder="123"
-                            maxLength={3}
-                            value={cardDetails.cvc}
-                            onChange={(e) => setCardDetails(prev => ({ ...prev, cvc: e.target.value.replace(/\D/g, "") }))}
-                            required
-                            className="bg-transparent border-furnizo-border rounded font-sans text-xs h-10 focus-visible:ring-furnizo-brown"
-                          />
-                        </div>
-                      </div>
-                    </div>
+                  {paymentMethod === "card" && showCardPayment && (
+                    <CardPaymentLocal cardDetails={cardDetails} setCardDetails={setCardDetails} />
                   )}
 
                   <div className="pt-6">
