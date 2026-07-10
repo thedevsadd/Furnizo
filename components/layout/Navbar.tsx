@@ -249,13 +249,14 @@ export default function Navbar() {
             })}
 
             {/* NEW sparkle badge */}
-            <span
-              className={`font-sans text-xs font-medium tracking-widest uppercase cursor-default select-none ${
+            <Link
+              href="/new"
+              className={`font-sans text-xs font-medium tracking-widest uppercase cursor-pointer hover:opacity-80 transition-opacity select-none ${
                 showScrolled ? "sparkle-new-scrolled" : "sparkle-new"
               }`}
             >
               NEW
-            </span>
+            </Link>
           </nav>
 
           {/* ── RIGHT: Search + Wishlist + Cart ── */}
