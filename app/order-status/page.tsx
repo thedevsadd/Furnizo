@@ -31,45 +31,48 @@ export default function OrderStatusPage() {
       const searchParams = new URLSearchParams(window.location.search);
       const id = searchParams.get("id");
       if (id) {
-        setOrderIdInput(id);
-        setSearchedId(id);
-        setSearched(true);
+        const cleanId = id.trim().replace(/[^a-zA-Z0-9-]/g, "");
+        if (cleanId) {
+          setOrderIdInput(cleanId);
+          setSearchedId(cleanId);
+          setSearched(true);
 
-        if (id.toUpperCase() === "DEMO-TRACK-100") {
-          const demoOrder: Order = {
-            id: "DEMO-TRACK-100",
-            date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), // 2 days ago
-            items: [
-              {
-                product: {
-                  id: "prod-01",
-                  slug: "soren-lounge-chair",
-                  name: "Soren Lounge Chair",
-                  category: "Chair",
-                  tags: ["lounge", "oak", "minimalist", "living-room"],
-                  price: 450,
-                  description: "Designed for comfort and visual lightness...",
-                  imageUrls: ["/Furnizo-Assets/Products/Chair/Chair 1/Main-Product.jpeg"],
-                  stock: 8,
+          if (cleanId.toUpperCase() === "DEMO-TRACK-100") {
+            const demoOrder: Order = {
+              id: "DEMO-TRACK-100",
+              date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), // 2 days ago
+              items: [
+                {
+                  product: {
+                    id: "prod-01",
+                    slug: "soren-lounge-chair",
+                    name: "Soren Lounge Chair",
+                    category: "Chair",
+                    tags: ["lounge", "oak", "minimalist", "living-room"],
+                    price: 450,
+                    description: "Designed for comfort and visual lightness...",
+                    imageUrls: ["/Furnizo-Assets/Products/Chair/Chair 1/Main-Product.jpeg"],
+                    stock: 8,
+                  },
+                  quantity: 1,
                 },
-                quantity: 1,
+              ],
+              total: 450,
+              customerInfo: {
+                name: "Alexander Mercer",
+                email: "tawhidsadman.dev@gmail.com",
+                address: "148 Oiled Ash Avenue, Apt 4B",
+                city: "Copenhagen",
+                postalCode: "1050",
+                phone: "0000000000",
               },
-            ],
-            total: 450,
-            customerInfo: {
-              name: "Alexander Mercer",
-              email: "tawhidsadman.dev@gmail.com",
-              address: "148 Oiled Ash Avenue, Apt 4B",
-              city: "Copenhagen",
-              postalCode: "1050",
-              phone: "0000000000",
-            },
-            status: "Confirmed",
-          };
-          setTrackedOrder(demoOrder);
-        } else {
-          const found = orders.find((o) => o.id === id);
-          setTrackedOrder(found || null);
+              status: "Confirmed",
+            };
+            setTrackedOrder(demoOrder);
+          } else {
+            const found = orders.find((o) => o.id === cleanId);
+            setTrackedOrder(found || null);
+          }
         }
       }
     }
@@ -77,7 +80,8 @@ export default function OrderStatusPage() {
 
   const handleTrack = (e: React.FormEvent) => {
     e.preventDefault();
-    const targetId = orderIdInput.trim();
+    const rawId = orderIdInput.trim();
+    const targetId = rawId.replace(/[^a-zA-Z0-9-]/g, "");
     if (!targetId) return;
 
     setSearchedId(targetId);

@@ -115,6 +115,13 @@ export default function CheckoutPage() {
       return;
     }
 
+    // Email format validation (Regex)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+
     // Phone digits validation (at least 7 numbers)
     const digitsOnly = formData.phone.replace(/\D/g, "");
     if (digitsOnly.length < 7) {
