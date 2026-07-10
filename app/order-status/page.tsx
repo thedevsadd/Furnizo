@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { useOrderStore } from "@/lib/store/orderStore";
+import { useOrderStore, getOrderStatus, getExpectedDeliveryDate } from "@/lib/store/orderStore";
 import { Order } from "@/types";
-import { Check, Truck, Package, Calendar, Search } from "lucide-react";
+import { Check, Calendar, Search } from "lucide-react";
 import Image from "next/image";
 
 export default function OrderStatusPage() {
@@ -13,8 +13,67 @@ export default function OrderStatusPage() {
   const [searchedId, setSearchedId] = useState("");
   const [trackedOrder, setTrackedOrder] = useState<Order | null>(null);
   const [searched, setSearched] = useState(false);
+  const [tick, setTick] = useState(0);
 
   const orders = useOrderStore((state) => state.orders);
+
+  // Real-time ticking to update elapsed status
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTick((t) => t + 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Parse URL query parameter for order ID
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const searchParams = new URLSearchParams(window.location.search);
+      const id = searchParams.get("id");
+      if (id) {
+        setOrderIdInput(id);
+        setSearchedId(id);
+        setSearched(true);
+
+        if (id.toUpperCase() === "DEMO-TRACK-100") {
+          const demoOrder: Order = {
+            id: "DEMO-TRACK-100",
+            date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), // 2 days ago
+            items: [
+              {
+                product: {
+                  id: "prod-01",
+                  slug: "soren-lounge-chair",
+                  name: "Soren Lounge Chair",
+                  category: "Chair",
+                  tags: ["lounge", "oak", "minimalist", "living-room"],
+                  price: 450,
+                  description: "Designed for comfort and visual lightness...",
+                  imageUrls: ["/Furnizo-Assets/Products/Chair/Chair 1/Main-Product.jpeg"],
+                  stock: 8,
+                },
+                quantity: 1,
+              },
+            ],
+            total: 450,
+            customerInfo: {
+              name: "Alexander Mercer",
+              email: "alexander@example.com",
+              address: "148 Oiled Ash Avenue, Apt 4B",
+              city: "Copenhagen",
+              postalCode: "1050",
+              phone: "+45 91 82 73 64",
+            },
+            status: "Confirmed",
+          };
+          setTrackedOrder(demoOrder);
+        } else {
+          const found = orders.find((o) => o.id === id);
+          setTrackedOrder(found || null);
+        }
+      }
+    }
+  }, [orders]);
 
   const handleTrack = (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,11 +83,10 @@ export default function OrderStatusPage() {
     setSearchedId(targetId);
     setSearched(true);
 
-    // Check for demo case
     if (targetId.toUpperCase() === "DEMO-TRACK-100") {
       const demoOrder: Order = {
         id: "DEMO-TRACK-100",
-        date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), // 2 days ago
+        date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
         items: [
           {
             product: {
@@ -44,22 +102,8 @@ export default function OrderStatusPage() {
             },
             quantity: 1,
           },
-          {
-            product: {
-              id: "prod-02",
-              slug: "nils-accent-stool",
-              name: "Nils Accent Stool",
-              category: "Chair",
-              tags: ["stool", "oak", "minimal", "side"],
-              price: 120,
-              description: "Multi-functional and compact...",
-              imageUrls: ["/Furnizo-Assets/Products/Chair/Chair 2/Main-Product.jpeg"],
-              stock: 15,
-            },
-            quantity: 1,
-          },
         ],
-        total: 570,
+        total: 450,
         customerInfo: {
           name: "Alexander Mercer",
           email: "alexander@example.com",
@@ -68,29 +112,28 @@ export default function OrderStatusPage() {
           postalCode: "1050",
           phone: "+45 91 82 73 64",
         },
-        status: "Shipped",
+        status: "Confirmed",
       };
       setTrackedOrder(demoOrder);
       return;
     }
 
-    // Search in store
     const found = orders.find((o) => o.id === targetId);
     setTrackedOrder(found || null);
   };
 
   const steps = [
-    { label: "Confirmed", status: "Confirmed" },
-    { label: "Processing", status: "Processing" },
-    { label: "Shipped", status: "Shipped" },
-    { label: "Delivered", status: "Delivered" },
+    { label: "Order Received", status: "Order Received" },
+    { label: "Stock Cleared", status: "Stock Cleared" },
+    { label: "Order Confirmed", status: "Order Confirmed" },
+    { label: "Way to Packaging", status: "Way to Packaging" },
+    { label: "Packaged", status: "Packaged" },
+    { label: "Out for Delivery", status: "Out for Delivery" },
   ];
 
-  const getStepIndex = (status: string) => {
-    return steps.findIndex((s) => s.status === status);
-  };
-
-  const activeIndex = trackedOrder ? getStepIndex(trackedOrder.status) : -1;
+  // Resolve status dynamically
+  const currentStatus = trackedOrder ? getOrderStatus(trackedOrder) : "";
+  const activeIndex = trackedOrder ? steps.findIndex((s) => s.status === currentStatus) : -1;
 
   return (
     <div className="flex flex-col min-h-screen bg-furnizo-beige">
@@ -146,44 +189,67 @@ export default function OrderStatusPage() {
                   </div>
                 </div>
 
-                {/* Progress Visual Tracker */}
-                <div className="py-4">
-                  <div className="relative flex justify-between items-center w-full">
-                    {/* Connecting Bar */}
-                    <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-furnizo-border/50 -translate-y-1/2 z-0" />
-                    <div
-                      className="absolute top-1/2 left-0 h-0.5 bg-furnizo-brown -translate-y-1/2 z-0 transition-all duration-700 ease-out"
-                      style={{ width: `${(activeIndex / (steps.length - 1)) * 100}%` }}
-                    />
-
-                    {/* Step Nodes */}
-                    {steps.map((step, idx) => {
-                      const isCompleted = idx <= activeIndex;
-                      const isActive = idx === activeIndex;
-
-                      return (
-                        <div key={idx} className="relative z-10 flex flex-col items-center">
-                          <div
-                            className={`h-7 w-7 rounded-full flex items-center justify-center border transition-all duration-500 ${
-                              isCompleted
-                                ? "bg-furnizo-brown border-furnizo-brown text-white"
-                                : "bg-white border-furnizo-border text-furnizo-muted"
-                            } ${isActive ? "ring-4 ring-furnizo-brown/20 scale-110" : ""}`}
-                          >
-                            {isCompleted ? <Check size={12} strokeWidth={3} /> : <span className="text-[10px] font-sans font-medium">{idx + 1}</span>}
-                          </div>
-                          <span
-                            className={`absolute -bottom-6 font-sans text-[9px] uppercase tracking-wider font-semibold whitespace-nowrap mt-2 ${
-                              isCompleted ? "text-furnizo-charcoal" : "text-furnizo-muted"
-                            }`}
-                          >
-                            {step.label}
-                          </span>
-                        </div>
-                      );
-                    })}
+                {/* Expected Delivery Banner or Cancelled Banner */}
+                {currentStatus === "Cancelled" ? (
+                  <div className="bg-red-50 border border-red-200 text-red-800 rounded-lg p-4 font-sans text-xs flex flex-col gap-1">
+                    <span className="font-semibold uppercase tracking-wider text-[9px] block">Order Cancelled</span>
+                    <p>This order was cancelled and will not be delivered.</p>
                   </div>
-                </div>
+                ) : (
+                  <>
+                    {currentStatus === "Out for Delivery" && (
+                      <div className="bg-amber-50 border border-amber-200 text-amber-800 rounded-lg p-4 font-sans text-xs flex items-center justify-between">
+                        <div>
+                          <span className="font-semibold uppercase tracking-wider text-[9px] block text-amber-900">Out for Delivery</span>
+                          <p className="mt-0.5 text-amber-800">Your shipment is with our dispatch courier.</p>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-[9px] uppercase tracking-wider text-amber-700 block">Expected Arrival</span>
+                          <span className="font-semibold text-amber-900 text-xs sm:text-sm">{getExpectedDeliveryDate(trackedOrder.date)}</span>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Progress Visual Tracker */}
+                    <div className="py-8 px-2 sm:px-4">
+                      <div className="relative flex justify-between items-center w-full">
+                        {/* Connecting Bar */}
+                        <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-furnizo-border/50 -translate-y-1/2 z-0" />
+                        <div
+                          className="absolute top-1/2 left-0 h-0.5 bg-furnizo-brown -translate-y-1/2 z-0 transition-all duration-700 ease-out"
+                          style={{ width: `${(activeIndex / (steps.length - 1)) * 100}%` }}
+                        />
+
+                        {/* Step Nodes */}
+                        {steps.map((step, idx) => {
+                          const isCompleted = idx <= activeIndex;
+                          const isActive = idx === activeIndex;
+
+                          return (
+                            <div key={idx} className="relative z-10 flex flex-col items-center">
+                              <div
+                                className={`h-7 w-7 rounded-full flex items-center justify-center border transition-all duration-500 ${
+                                  isCompleted
+                                    ? "bg-furnizo-brown border-furnizo-brown text-white"
+                                    : "bg-white border-furnizo-border text-furnizo-muted"
+                                } ${isActive ? "ring-4 ring-furnizo-brown/20 scale-110" : ""}`}
+                              >
+                                {isCompleted ? <Check size={12} strokeWidth={3} /> : <span className="text-[10px] font-sans font-medium">{idx + 1}</span>}
+                              </div>
+                              <span
+                                className={`absolute -bottom-6 font-sans text-[8px] uppercase tracking-wider font-semibold whitespace-nowrap mt-2 text-center ${
+                                  isCompleted ? "text-furnizo-charcoal" : "text-furnizo-muted"
+                                }`}
+                              >
+                                {step.label}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </>
+                )}
 
                 {/* Order Details & Summary Split */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-furnizo-border/50 pt-10 mt-6">

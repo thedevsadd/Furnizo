@@ -34,5 +34,5 @@ export interface Order {
   total: number;
   date: string;
   customerInfo: CustomerInfo;
-  status: "Confirmed" | "Processing" | "Shipped" | "Delivered";
+  status: "Confirmed" | "Processing" | "Shipped" | "Delivered" | "Cancelled";
 }
