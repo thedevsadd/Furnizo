@@ -151,7 +151,7 @@ export default function ProductCard({ product, index = 0, darkMode = false }: Pr
           <p className={`text-[9px] font-sans font-semibold uppercase tracking-[0.18em] ${darkMode ? "text-furnizo-beige/50" : "text-furnizo-muted/80"}`}>
             {product.category}
           </p>
-          <h3 className={`mt-1 font-sans text-sm font-medium line-clamp-1 transition-colors ${darkMode ? "text-furnizo-beige group-hover:text-furnizo-brown/80" : "text-furnizo-charcoal group-hover:text-furnizo-brown"}`}>
+          <h3 className={`mt-1 font-sans text-sm font-medium line-clamp-1 transition-colors ${darkMode ? "text-furnizo-beige" : "text-furnizo-charcoal group-hover:text-furnizo-brown"}`}>
             {product.name}
           </h3>
           <div className="mt-1 flex items-baseline gap-2">
