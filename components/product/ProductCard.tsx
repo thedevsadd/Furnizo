@@ -151,11 +151,11 @@ export default function ProductCard({ product, index = 0, darkMode = false }: Pr
             {product.name}
           </h3>
           <div className="mt-1 flex items-baseline gap-2">
-            <span className="font-sans text-sm font-medium text-furnizo-brown">
+            <span className={`font-sans text-sm font-semibold ${darkMode ? "text-furnizo-beige" : "text-furnizo-brown"}`}>
               ${product.price.toLocaleString()}
             </span>
             {product.originalPrice && (
-              <span className={`font-sans text-xs font-light line-through ${darkMode ? "text-furnizo-beige/40" : "text-furnizo-muted/70"}`}>
+              <span className={`font-sans text-xs font-light line-through ${darkMode ? "text-furnizo-beige/35" : "text-furnizo-muted/70"}`}>
                 ${product.originalPrice.toLocaleString()}
               </span>
             )}

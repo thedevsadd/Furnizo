@@ -166,7 +166,7 @@ export default function Home() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
               <div>
-                <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-furnizo-brown">
+                <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.25em] text-furnizo-beige/50">
                   Featured
                 </span>
                 <h2 className="mt-2 font-sans text-2xl font-light text-furnizo-beige tracking-wide">
@@ -175,7 +175,7 @@ export default function Home() {
               </div>
               <Link
                 href="/products"
-                className="w-fit mt-4 md:mt-0 inline-flex items-center gap-2 font-sans text-xs font-medium tracking-wider text-furnizo-brown border-b border-furnizo-brown pb-1 hover:text-furnizo-beige hover:border-furnizo-beige transition-colors"
+                className="w-fit mt-4 md:mt-0 inline-flex items-center gap-2 font-sans text-xs font-medium tracking-wider text-furnizo-beige/80 border-b border-furnizo-beige/40 pb-1 hover:text-furnizo-brown hover:border-furnizo-brown transition-colors"
               >
                 Browse All Products
                 <ArrowRight size={12} />
