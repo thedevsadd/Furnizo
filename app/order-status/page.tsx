@@ -17,7 +17,7 @@ export default function OrderStatusPage() {
 
   const orders = useOrderStore((state) => state.orders);
 
-  // Real-time ticking to update elapsed status
+  // Live interval to simulate real-time updates
   useEffect(() => {
     const timer = setInterval(() => {
       setTick((t) => t + 1);
@@ -25,7 +25,7 @@ export default function OrderStatusPage() {
     return () => clearInterval(timer);
   }, []);
 
-  // Parse URL query parameter for order ID
+  // Parse order ID from query string if present
   useEffect(() => {
     if (typeof window !== "undefined") {
       const searchParams = new URLSearchParams(window.location.search);
@@ -135,7 +135,6 @@ export default function OrderStatusPage() {
     { label: "Out for Delivery", status: "Out for Delivery" },
   ];
 
-  // Resolve status dynamically
   const currentStatus = trackedOrder ? getOrderStatus(trackedOrder) : "";
   const activeIndex = trackedOrder ? steps.findIndex((s) => s.status === currentStatus) : -1;
 
@@ -156,7 +155,6 @@ export default function OrderStatusPage() {
           </p>
         </div>
 
-        {/* Tracking Form */}
         <form onSubmit={handleTrack} className="flex gap-3 mb-12">
           <div className="relative flex-grow">
             <input
@@ -181,7 +179,6 @@ export default function OrderStatusPage() {
             {trackedOrder ? (
               <div className="border border-furnizo-border bg-white rounded-lg p-6 sm:p-8 space-y-8 shadow-sm">
                 
-                {/* Order Summary Metadata */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-furnizo-border/50 pb-6">
                   <div>
                     <span className="font-sans text-[9px] uppercase tracking-wider text-furnizo-muted">Order Identifier</span>
@@ -193,7 +190,6 @@ export default function OrderStatusPage() {
                   </div>
                 </div>
 
-                {/* Expected Delivery Banner or Cancelled Banner */}
                 {currentStatus === "Cancelled" ? (
                   <div className="bg-red-50 border border-red-200 text-red-800 rounded-lg p-4 font-sans text-xs flex flex-col gap-1">
                     <span className="font-semibold uppercase tracking-wider text-[9px] block">Order Cancelled</span>
@@ -214,17 +210,14 @@ export default function OrderStatusPage() {
                       </div>
                     )}
 
-                    {/* Progress Visual Tracker */}
                     <div className="py-8 px-2 sm:px-4">
                       <div className="relative flex justify-between items-center w-full">
-                        {/* Connecting Bar */}
                         <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-furnizo-border/50 -translate-y-1/2 z-0" />
                         <div
                           className="absolute top-1/2 left-0 h-0.5 bg-furnizo-brown -translate-y-1/2 z-0 transition-all duration-700 ease-out"
                           style={{ width: `${(activeIndex / (steps.length - 1)) * 100}%` }}
                         />
 
-                        {/* Step Nodes */}
                         {steps.map((step, idx) => {
                           const isCompleted = idx <= activeIndex;
                           const isActive = idx === activeIndex;
@@ -260,9 +253,7 @@ export default function OrderStatusPage() {
                   </>
                 )}
 
-                {/* Order Details & Summary Split */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-furnizo-border/50 pt-10 mt-6">
-                  {/* Items Ordered */}
                   <div className="space-y-4">
                     <h3 className="font-sans text-xs font-semibold uppercase tracking-wider text-furnizo-charcoal">
                       Shipment Items

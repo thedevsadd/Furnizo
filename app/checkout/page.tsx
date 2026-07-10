@@ -110,7 +110,6 @@ export default function CheckoutPage() {
   const handlePlaceOrder = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // 1. Basic validation
     if (
       !formData.name ||
       !formData.email ||
@@ -123,21 +122,18 @@ export default function CheckoutPage() {
       return;
     }
 
-    // Email format validation (Regex)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       toast.error("Please enter a valid email address.");
       return;
     }
 
-    // Phone digits validation (at least 7 numbers)
     const digitsOnly = formData.phone.replace(/\D/g, "");
     if (digitsOnly.length < 7) {
       toast.error("Please enter a valid phone number (at least 7 digits).");
       return;
     }
 
-    // 1.5 Card Validation & Simulation
     if (paymentMethod === "card") {
       if (!cardDetails.name || !cardDetails.number || !cardDetails.expiry || !cardDetails.cvc) {
         toast.error("Please fill in all credit card details.");
@@ -168,7 +164,6 @@ export default function CheckoutPage() {
       return;
     }
 
-    // 2. Stock validation
     for (const item of cartItems) {
       const liveStock = getStock(item.product.id);
       if (liveStock < item.quantity) {
@@ -179,24 +174,21 @@ export default function CheckoutPage() {
       }
     }
 
-    // 3. Calculation
     const shippingCost = cartTotalPrice >= 150 ? 0 : 15;
     const tax = Math.round(cartTotalPrice * 0.08 * 100) / 100;
     const totalOrderValue = cartTotalPrice + shippingCost + tax;
 
-    // 4. Create Order ID
     const randomId = Math.floor(100000 + Math.random() * 900000);
     const orderId = `ORD-${randomId}`;
 
     setIsPlacingOrder(true);
 
     setTimeout(() => {
-      // 5. Decrement Stock for all products
+      // update stock level
       cartItems.forEach((item) => {
         decrementStock(item.product.id, item.quantity);
       });
 
-      // 6. Create Order
       const newOrder: Order = {
         id: orderId,
         items: [...cartItems],
@@ -207,11 +199,8 @@ export default function CheckoutPage() {
       };
 
       addOrder(newOrder);
-
-      // 7. Clear Cart
       clearCart();
 
-      // 8. Redirect
       toast.success("Order placed successfully!", {
         icon: "🤎",
       });
