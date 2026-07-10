@@ -181,7 +181,7 @@ export default function OrderConfirmationPage({ params }: PageProps) {
           <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 pt-6 w-full">
             <Link href="/products" className="w-full sm:w-auto sm:flex-1 max-w-xs">
               <Button className="w-full font-sans text-xs tracking-wider uppercase bg-furnizo-brown text-furnizo-beige hover:bg-furnizo-brown/95 py-3.5 h-11 flex items-center justify-center gap-1.5 cursor-pointer border border-transparent rounded-full font-semibold transition-all">
-                Continue Shopping
+                Shopping
                 <ChevronRight size={12} />
               </Button>
             </Link>

@@ -260,7 +260,7 @@ export default function CheckoutPage() {
                       id="email"
                       name="email"
                       type="email"
-                      placeholder="jane.doe@example.com"
+                      placeholder="tawhidsadman.dev@gmail.com"
                       value={formData.email}
                       onChange={handleInputChange}
                       required
@@ -328,7 +328,7 @@ export default function CheckoutPage() {
                       id="phone"
                       name="phone"
                       type="tel"
-                      placeholder="(503) 555-0199"
+                      placeholder="0000000000"
                       value={formData.phone}
                       onChange={handleInputChange}
                       required

@@ -58,11 +58,11 @@ export default function OrderStatusPage() {
             total: 450,
             customerInfo: {
               name: "Alexander Mercer",
-              email: "alexander@example.com",
+              email: "tawhidsadman.dev@gmail.com",
               address: "148 Oiled Ash Avenue, Apt 4B",
               city: "Copenhagen",
               postalCode: "1050",
-              phone: "+45 91 82 73 64",
+              phone: "0000000000",
             },
             status: "Confirmed",
           };
@@ -106,11 +106,11 @@ export default function OrderStatusPage() {
         total: 450,
         customerInfo: {
           name: "Alexander Mercer",
-          email: "alexander@example.com",
+          email: "tawhidsadman.dev@gmail.com",
           address: "148 Oiled Ash Avenue, Apt 4B",
           city: "Copenhagen",
           postalCode: "1050",
-          phone: "+45 91 82 73 64",
+          phone: "0000000000",
         },
         status: "Confirmed",
       };
