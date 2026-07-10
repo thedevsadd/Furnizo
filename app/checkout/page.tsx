@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { ArrowLeft, CreditCard } from "lucide-react";
+import { ArrowLeft, CreditCard, Lock } from "lucide-react";
 import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -20,6 +20,16 @@ import { CustomerInfo, Order } from "@/types";
 export default function CheckoutPage() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
+
+  // Payment States
+  const [paymentMethod, setPaymentMethod] = useState<"cod" | "card">("cod");
+  const [isPaying, setIsPaying] = useState(false);
+  const [cardDetails, setCardDetails] = useState({
+    name: "",
+    number: "",
+    expiry: "",
+    cvc: "",
+  });
 
   // Form Fields
   const [formData, setFormData] = useState<CustomerInfo>({
@@ -65,6 +75,37 @@ export default function CheckoutPage() {
       !formData.phone
     ) {
       toast.error("Please fill in all shipping details.");
+      return;
+    }
+
+    // 1.5 Card Validation & Simulation
+    if (paymentMethod === "card") {
+      if (!cardDetails.name || !cardDetails.number || !cardDetails.expiry || !cardDetails.cvc) {
+        toast.error("Please fill in all credit card details.");
+        return;
+      }
+      if (cardDetails.number.replace(/\s/g, '').length < 16) {
+        toast.error("Please enter a valid 16-digit card number.");
+        return;
+      }
+      if (cardDetails.expiry.length < 5) {
+        toast.error("Please enter a valid card expiry date (MM/YY).");
+        return;
+      }
+      if (cardDetails.cvc.length < 3) {
+        toast.error("Please enter a valid 3-digit security code (CVC).");
+        return;
+      }
+
+      setIsPaying(true);
+
+      setTimeout(() => {
+        setIsPaying(false);
+        toast.error("Credit card transaction failed. Card payments are temporarily unavailable for this region. Please choose Cash on Delivery to finalize.", {
+          duration: 6000,
+          icon: "❌"
+        });
+      }, 1500);
       return;
     }
 
@@ -272,25 +313,177 @@ export default function CheckoutPage() {
                     />
                   </div>
 
-                  {/* Simulated Payment */}
-                  <div className="border border-furnizo-border bg-furnizo-border/10 rounded-lg p-5 mt-8 space-y-4">
-                    <div className="flex items-center gap-3">
-                      <CreditCard size={18} className="text-furnizo-brown" />
-                      <h3 className="font-sans text-sm font-medium text-furnizo-charcoal">
-                        Payment System
-                      </h3>
+                  {/* Payment Method Selector */}
+                  <div className="space-y-4 pt-6 border-t border-furnizo-border">
+                    <h3 className="font-sans text-xs font-semibold uppercase tracking-wider text-furnizo-charcoal">
+                      Payment Method
+                    </h3>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {/* Cash on Delivery option */}
+                      <label className={`flex items-start justify-between p-4 border rounded-lg cursor-pointer transition-all ${
+                        paymentMethod === "cod" 
+                          ? "border-furnizo-brown bg-furnizo-brown/5 ring-1 ring-furnizo-brown" 
+                          : "border-furnizo-border bg-white hover:border-furnizo-muted"
+                      }`}>
+                        <div className="flex gap-3">
+                          <input
+                            type="radio"
+                            name="paymentMethod"
+                            value="cod"
+                            checked={paymentMethod === "cod"}
+                            onChange={() => setPaymentMethod("cod")}
+                            className="mt-0.5 text-furnizo-brown focus:ring-furnizo-brown"
+                          />
+                          <div className="space-y-0.5">
+                            <span className="font-sans text-xs font-semibold text-furnizo-charcoal">Cash on Delivery</span>
+                            <p className="font-sans text-[10px] text-furnizo-muted">Pay with cash upon receipt.</p>
+                          </div>
+                        </div>
+                      </label>
+
+                      {/* Card Payment option */}
+                      <label className={`flex flex-col p-4 border rounded-lg cursor-pointer transition-all ${
+                        paymentMethod === "card" 
+                          ? "border-furnizo-brown bg-furnizo-brown/5 ring-1 ring-furnizo-brown" 
+                          : "border-furnizo-border bg-white hover:border-furnizo-muted"
+                      }`}>
+                        <div className="flex items-start justify-between w-full">
+                          <div className="flex gap-3">
+                            <input
+                              type="radio"
+                              name="paymentMethod"
+                              value="card"
+                              checked={paymentMethod === "card"}
+                              onChange={() => setPaymentMethod("card")}
+                              className="mt-0.5 text-furnizo-brown focus:ring-furnizo-brown"
+                            />
+                            <div className="space-y-0.5">
+                              <span className="font-sans text-xs font-semibold text-furnizo-charcoal">Credit / Debit Card</span>
+                              <p className="font-sans text-[10px] text-furnizo-muted">Pay securely with card.</p>
+                            </div>
+                          </div>
+
+                          {/* Card logos */}
+                          <div className="flex gap-1 items-center">
+                            {/* Visa */}
+                            <svg className="w-8 h-5 rounded border border-gray-200 bg-white p-0.5" viewBox="0 0 24 15" fill="none">
+                              <path d="M10.5 12h1.8l1.1-7H11.6l-1.1 7zm7.6-6.8c-.3-.2-.8-.4-1.4-.4-1.5 0-2.5.8-2.5 1.9 0 .8.8 1.3 1.3 1.6.6.3.8.5.8.7 0 .4-.5.6-1 .6-.6 0-1-.2-1.3-.4l-.2-.1-.2 1.4c.4.2.9.3 1.6.3 1.6 0 2.6-.8 2.6-2 0-.8-.5-1.2-1.6-1.7-.5-.3-.9-.5-.9-.8 0-.3.3-.5.8-.5.4 0 .8.1 1.1.3l.1.1.2-1.4zm-4.7.1l-1.3 4.8-.6-3.2-.2-1.1c-.2-.5-.6-.9-1.1-1.1H8.3l-.1.1.1.1c.4.2.9.5 1.2.9l1.4 5.3h1.9l2.8-7h-1.9zm8 .7c-.1-.3-.4-.5-.7-.5h-1.5c-.2 0-.4.1-.5.3l-2.1 5h1.9l.4-.9h2.3l.2.9h1.7l-1.7-4.8zm-1.8 2.5l.7-2 1.1 2h-1.8z" fill="#1A1F71"/>
+                            </svg>
+                            {/* Mastercard */}
+                            <svg className="w-8 h-5 rounded border border-gray-200 bg-white p-0.5" viewBox="0 0 24 15" fill="none">
+                              <circle cx="9" cy="7.5" r="4.5" fill="#EB001B" opacity="0.9"/>
+                              <circle cx="15" cy="7.5" r="4.5" fill="#F79E1B" opacity="0.9"/>
+                              <path d="M12 4.6a4.5 4.5 0 010 5.8 4.5 4.5 0 010-5.8z" fill="#FF5F00"/>
+                            </svg>
+                            {/* Amex */}
+                            <svg className="w-8 h-5 rounded border border-gray-200 bg-white p-0.5" viewBox="0 0 24 15" fill="none">
+                              <rect width="24" height="15" rx="1" fill="#0070CD"/>
+                              <path d="M4 11V4h2.5c.8 0 1.2.3 1.2.8v.5c0 .5-.3.8-.7.9.6.2.7.5.7 1v2H6.3V8.8c0-.3-.1-.5-.4-.5H5.4v2.7H4zm1.4-3.5h.7c.3 0 .4-.1.4-.3v-.3c0-.2-.1-.3-.4-.3h-.7v.9zm4.2 3.5V4h1.1l1 2.9 1-2.9h1.1v7h-1.3V6.2L11 8.8H10L8.7 6.2v4.8H9.6zm7.2 0V4h3.1v1.1h-2v1.6h1.8v1.1H18v1.8h2.1V11h-3.2z" fill="white"/>
+                            </svg>
+                          </div>
+                        </div>
+                      </label>
                     </div>
-                    <p className="font-sans text-xs text-furnizo-muted leading-relaxed">
-                      For testing purposes, this site simulates the checkout flow. No real transaction takes place and card info is bypassed. Click "Place Order" to finalize.
-                    </p>
                   </div>
 
-                  <div className="pt-4">
+                  {/* Card Details Panel */}
+                  {paymentMethod === "card" && (
+                    <div className="border border-furnizo-border bg-white rounded-lg p-5 space-y-4 mt-6 animate-fadeIn">
+                      <div className="flex items-center justify-between">
+                        <span className="font-sans text-[10px] font-semibold uppercase tracking-wider text-furnizo-muted">Simulated Transaction Details</span>
+                        <span className="flex items-center gap-1 text-[9px] font-sans text-furnizo-muted">
+                          <Lock size={10} /> Secure Checkout
+                        </span>
+                      </div>
+                      
+                      {/* Cardholder Name */}
+                      <div className="space-y-1.5">
+                        <Label htmlFor="cardName" className="font-sans text-[10px] text-furnizo-charcoal uppercase tracking-wider">Cardholder Name</Label>
+                        <Input
+                          id="cardName"
+                          type="text"
+                          placeholder="Jane Doe"
+                          value={cardDetails.name}
+                          onChange={(e) => setCardDetails(prev => ({ ...prev, name: e.target.value }))}
+                          required
+                          className="bg-transparent border-furnizo-border rounded font-sans text-xs h-10 focus-visible:ring-furnizo-brown"
+                        />
+                      </div>
+
+                      {/* Card Number */}
+                      <div className="space-y-1.5">
+                        <Label htmlFor="cardNumber" className="font-sans text-[10px] text-furnizo-charcoal uppercase tracking-wider">Card Number</Label>
+                        <Input
+                          id="cardNumber"
+                          type="text"
+                          placeholder="4111 2222 3333 4444"
+                          maxLength={19}
+                          value={cardDetails.number}
+                          onChange={(e) => {
+                            const val = e.target.value.replace(/\s?/g, '').replace(/(\d{4})/g, '$1 ').trim();
+                            setCardDetails(prev => ({ ...prev, number: val }));
+                          }}
+                          required
+                          className="bg-transparent border-furnizo-border rounded font-sans text-xs h-10 focus-visible:ring-furnizo-brown"
+                        />
+                      </div>
+
+                      {/* Expiry & CVC */}
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-1.5">
+                          <Label htmlFor="cardExpiry" className="font-sans text-[10px] text-furnizo-charcoal uppercase tracking-wider">Expiry Date</Label>
+                          <Input
+                            id="cardExpiry"
+                            type="text"
+                            placeholder="MM/YY"
+                            maxLength={5}
+                            value={cardDetails.expiry}
+                            onChange={(e) => {
+                              let val = e.target.value.replace(/\D/g, "");
+                              if (val.length > 2) {
+                                val = `${val.slice(0, 2)}/${val.slice(2, 4)}`;
+                              }
+                              setCardDetails(prev => ({ ...prev, expiry: val }));
+                            }}
+                            required
+                            className="bg-transparent border-furnizo-border rounded font-sans text-xs h-10 focus-visible:ring-furnizo-brown"
+                          />
+                        </div>
+                        <div className="space-y-1.5">
+                          <Label htmlFor="cardCvc" className="font-sans text-[10px] text-furnizo-charcoal uppercase tracking-wider">CVC</Label>
+                          <Input
+                            id="cardCvc"
+                            type="password"
+                            placeholder="123"
+                            maxLength={3}
+                            value={cardDetails.cvc}
+                            onChange={(e) => setCardDetails(prev => ({ ...prev, cvc: e.target.value.replace(/\D/g, "") }))}
+                            required
+                            className="bg-transparent border-furnizo-border rounded font-sans text-xs h-10 focus-visible:ring-furnizo-brown"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="pt-6">
                     <Button
                       type="submit"
-                      className="w-full font-sans text-xs tracking-wider uppercase bg-furnizo-brown text-furnizo-beige hover:bg-furnizo-brown/95 py-4 h-12 cursor-pointer border border-transparent"
+                      disabled={isPaying}
+                      className="w-full font-sans text-xs tracking-wider uppercase bg-furnizo-brown text-furnizo-beige hover:bg-furnizo-brown/95 py-4 h-12 cursor-pointer border border-transparent flex items-center justify-center gap-2"
                     >
-                      Place Order — ${finalTotal}
+                      {isPaying ? (
+                        <>
+                          <svg className="animate-spin h-4 w-4 text-furnizo-beige" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          Processing Payment...
+                        </>
+                      ) : (
+                        `Place Order — $${finalTotal}`
+                      )}
                     </Button>
                   </div>
 
