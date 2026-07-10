@@ -39,13 +39,13 @@ export function getOrderStatus(order: Order): string {
   if (order.status === "Cancelled") return "Cancelled";
 
   const elapsedMs = Date.now() - new Date(order.date).getTime();
-  const elapsedSec = elapsedMs / 1000;
+  const elapsedMin = elapsedMs / (1000 * 60);
 
-  if (elapsedSec < 10) return "Order Received";
-  if (elapsedSec < 30) return "Stock Cleared";
-  if (elapsedSec < 60) return "Order Confirmed";
-  if (elapsedSec < 120) return "Way to Packaging"; // 1 min to 2 min
-  if (elapsedSec < 7200) return "Packaged";       // 2 min to 2 hours
+  if (elapsedMin < 1) return "Order Received";
+  if (elapsedMin < 2) return "Stock Cleared";
+  if (elapsedMin < 3) return "Order Confirmed";
+  if (elapsedMin < 5) return "Way to Packaging";
+  if (elapsedMin < 120) return "Packaged"; // 2 hours
   return "Out for Delivery";
 }
 

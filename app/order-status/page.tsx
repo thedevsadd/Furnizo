@@ -227,14 +227,19 @@ export default function OrderStatusPage() {
 
                           return (
                             <div key={idx} className="relative z-10 flex flex-col items-center">
-                              <div
-                                className={`h-7 w-7 rounded-full flex items-center justify-center border transition-all duration-500 ${
-                                  isCompleted
-                                    ? "bg-furnizo-brown border-furnizo-brown text-white"
-                                    : "bg-white border-furnizo-border text-furnizo-muted"
-                                } ${isActive ? "ring-4 ring-furnizo-brown/20 scale-110" : ""}`}
-                              >
-                                {isCompleted ? <Check size={12} strokeWidth={3} /> : <span className="text-[10px] font-sans font-medium">{idx + 1}</span>}
+                              <div className="relative h-7 w-7 flex items-center justify-center">
+                                {isActive && (
+                                  <span className="absolute inset-0 rounded-full bg-furnizo-brown/30 animate-ping" />
+                                )}
+                                <div
+                                  className={`relative z-10 h-7 w-7 rounded-full flex items-center justify-center border transition-all duration-500 ${
+                                    isCompleted
+                                      ? "bg-furnizo-brown border-furnizo-brown text-white"
+                                      : "bg-white border-furnizo-border text-furnizo-muted"
+                                  } ${isActive ? "ring-4 ring-furnizo-brown/20 scale-105" : ""}`}
+                                >
+                                  {isCompleted ? <Check size={12} strokeWidth={3} /> : <span className="text-[10px] font-sans font-medium">{idx + 1}</span>}
+                                </div>
                               </div>
                               <span
                                 className={`absolute -bottom-6 font-sans text-[8px] uppercase tracking-wider font-semibold whitespace-nowrap mt-2 text-center ${
