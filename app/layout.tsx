@@ -14,6 +14,11 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   title: "Furnizo — Premium Minimalist Furniture",
   description: "A premium minimalist furniture e-commerce website showcasing sleek, modern design.",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
