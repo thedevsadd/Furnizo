@@ -320,21 +320,38 @@ export default function ProductDetailsClient({ product, relatedProducts }: Props
               {product.name}
             </h1>
 
-            {/* Price */}
-            <div className="flex items-baseline gap-3">
-              <span className="font-sans text-2xl font-light lg:text-furnizo-brown text-white">
-                ${product.price.toLocaleString()}
-              </span>
-              {product.originalPrice && (
-                <>
-                  <span className="font-sans text-lg font-light lg:text-furnizo-muted/70 text-white/50 line-through">
-                    ${product.originalPrice.toLocaleString()}
-                  </span>
-                  <span className="font-sans text-[10px] font-semibold uppercase tracking-wider text-white bg-furnizo-brown px-2 py-0.5 rounded">
-                    Save ${product.originalPrice - product.price}
-                  </span>
-                </>
-              )}
+            {/* Price & Wishlist Row */}
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-baseline gap-3">
+                <span className="font-sans text-2xl font-light lg:text-furnizo-brown text-white">
+                  ${product.price.toLocaleString()}
+                </span>
+                {product.originalPrice && (
+                  <>
+                    <span className="font-sans text-lg font-light lg:text-furnizo-muted/70 text-white/50 line-through">
+                      ${product.originalPrice.toLocaleString()}
+                    </span>
+                    <span className="font-sans text-[10px] font-semibold uppercase tracking-wider text-white bg-furnizo-brown px-2 py-0.5 rounded">
+                      Save ${product.originalPrice - product.price}
+                    </span>
+                  </>
+                )}
+              </div>
+
+              {/* Wishlist Button aligned with Price */}
+              <motion.button
+                onClick={handleToggleWishlist}
+                animate={wishlistBounce ? { scale: [1, 1.3, 0.9, 1.1, 1] } : { scale: 1 }}
+                transition={{ duration: 0.4 }}
+                className="flex items-center justify-center h-8 w-8 rounded-full border lg:border-furnizo-border/50 border-white/20 lg:text-furnizo-charcoal text-white lg:hover:border-furnizo-brown lg:hover:text-furnizo-brown hover:border-white/40 hover:bg-white/10 lg:hover:bg-furnizo-border/10 transition-all cursor-pointer flex-shrink-0"
+                aria-label="Toggle Wishlist"
+              >
+                <Heart
+                  size={14}
+                  strokeWidth={1.6}
+                  className={mounted && isInWishlist ? "lg:fill-furnizo-brown lg:text-furnizo-brown fill-white text-white" : ""}
+                />
+              </motion.button>
             </div>
 
             {/* Stock line */}
@@ -379,13 +396,13 @@ export default function ProductDetailsClient({ product, relatedProducts }: Props
             )}
 
             {/* CTA row */}
-            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+            <div className="flex flex-row gap-3 pt-2">
               <motion.button
                 onClick={handleAddToCart}
                 disabled={isOutOfStock}
                 animate={cartPop ? { scale: [1, 0.94, 1.04, 1] } : { scale: 1 }}
                 transition={{ duration: 0.4 }}
-                className={`flex-1 flex items-center justify-center gap-2.5 font-sans text-xs tracking-widest uppercase py-4 rounded-md transition-all cursor-pointer ${
+                className={`flex-1 flex items-center justify-center gap-1.5 font-sans text-[11px] sm:text-xs tracking-wider uppercase py-4 rounded-md transition-all cursor-pointer ${
                   isOutOfStock
                     ? "bg-furnizo-border text-furnizo-muted cursor-not-allowed"
                     : "lg:bg-white lg:text-furnizo-charcoal lg:border lg:border-furnizo-border lg:hover:bg-furnizo-border/20 bg-white/20 text-white hover:bg-white/30"
@@ -398,27 +415,13 @@ export default function ProductDetailsClient({ product, relatedProducts }: Props
               <motion.button
                 onClick={handleBuyNow}
                 disabled={isOutOfStock}
-                className={`flex-1 flex items-center justify-center gap-2.5 font-sans text-xs tracking-widest uppercase py-4 rounded-md transition-all cursor-pointer ${
+                className={`flex-1 flex items-center justify-center gap-1.5 font-sans text-[11px] sm:text-xs tracking-wider uppercase py-4 rounded-md transition-all cursor-pointer ${
                   isOutOfStock
                     ? "bg-furnizo-border text-furnizo-muted cursor-not-allowed"
                     : "lg:bg-furnizo-brown lg:text-furnizo-beige lg:hover:bg-furnizo-charcoal bg-white text-furnizo-brown hover:bg-white/90"
                 }`}
               >
                 Buy Now
-              </motion.button>
-
-              <motion.button
-                onClick={handleToggleWishlist}
-                animate={wishlistBounce ? { scale: [1, 1.3, 0.9, 1.1, 1] } : { scale: 1 }}
-                transition={{ duration: 0.4 }}
-                className="flex items-center justify-center w-full sm:w-14 py-4 rounded-md border lg:border-furnizo-border border-white/30 lg:text-furnizo-charcoal text-white lg:hover:border-furnizo-brown lg:hover:text-furnizo-brown hover:border-white hover:text-white transition-all cursor-pointer"
-                aria-label="Toggle Wishlist"
-              >
-                <Heart
-                  size={18}
-                  strokeWidth={1.6}
-                  className={mounted && isInWishlist ? "lg:fill-furnizo-brown lg:text-furnizo-brown fill-white text-white" : ""}
-                />
               </motion.button>
             </div>
 
