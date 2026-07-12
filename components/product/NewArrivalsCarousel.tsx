@@ -15,23 +15,21 @@ export default function NewArrivalsCarousel({ products }: NewArrivalsCarouselPro
   const containerRef = useRef<HTMLDivElement>(null);
   const [viewportWidth, setViewportWidth] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [slideStep, setSlideStep] = useState(324); // default to desktop: 300 + 24
   const controls = useAnimation();
 
-  const cardWidth = 300; // width of each product card container
-  const gap = 24; // gap between cards
-  const slideStep = cardWidth + gap; // 324px
-
   useEffect(() => {
-    if (containerRef.current) {
-      setViewportWidth(containerRef.current.offsetWidth);
-    }
-    const handleResize = () => {
+    const updateDimensions = () => {
       if (containerRef.current) {
         setViewportWidth(containerRef.current.offsetWidth);
       }
+      const isMobile = window.innerWidth < 640;
+      setSlideStep(isMobile ? 304 : 324);
     };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+
+    updateDimensions();
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
   }, []);
 
   // Calculate the max active index dynamically to prevent sliding beyond content
@@ -62,6 +60,31 @@ export default function NewArrivalsCarousel({ products }: NewArrivalsCarouselPro
     } else if (e.key === "ArrowRight") {
       e.preventDefault();
       handleNext();
+    }
+  };
+
+  const handleDragEnd = (event: any, info: any) => {
+    const draggedDistance = info.offset.x;
+    const velocity = info.velocity.x;
+
+    const swipeThreshold = 50;
+    const velocityThreshold = 150;
+
+    let indexChange = 0;
+
+    if (draggedDistance < -swipeThreshold || velocity < -velocityThreshold) {
+      // Swiped left -> increment index
+      indexChange = Math.ceil(Math.abs(draggedDistance) / slideStep);
+    } else if (draggedDistance > swipeThreshold || velocity > velocityThreshold) {
+      // Swiped right -> decrement index
+      indexChange = -Math.ceil(draggedDistance / slideStep);
+    }
+
+    const newIndex = Math.min(Math.max(0, activeIndex + indexChange), maxIndex);
+    if (newIndex !== activeIndex) {
+      setActiveIndex(newIndex);
+    } else {
+      controls.start({ x: -activeIndex * slideStep });
     }
   };
 
@@ -136,9 +159,13 @@ export default function NewArrivalsCarousel({ products }: NewArrivalsCarouselPro
           className="overflow-hidden outline-none relative w-full"
         >
           <motion.div
+            drag="x"
+            dragConstraints={{ left: -maxIndex * slideStep, right: 0 }}
+            dragElastic={0.2}
+            onDragEnd={handleDragEnd}
             animate={controls}
             transition={{ type: "spring", stiffness: 100, damping: 20 }}
-            className="flex gap-6 select-none"
+            className="flex gap-6 select-none cursor-grab active:cursor-grabbing"
             style={{ width: "max-content" }}
           >
             {products.map((product) => (
