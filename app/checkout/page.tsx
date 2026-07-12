@@ -34,7 +34,7 @@ const CardPaymentLocal = dynamic(
   { ssr: false }
 );
 
-const showCardPayment = process.env.NEXT_PUBLIC_ENABLE_CARD_PAYMENTS === "true";
+const showCardPayment = process.env.NEXT_PUBLIC_ENABLE_CARD_PAYMENTS !== "false";
 
 export default function CheckoutPage() {
   const router = useRouter();

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
 import {
   ArrowLeft, ShoppingBag, Heart, Minus, Plus,
@@ -35,6 +36,7 @@ export default function ProductDetailsClient({ product, relatedProducts }: Props
   const [cartPop, setCartPop] = useState(false);
   const [wishlistBounce, setWishlistBounce] = useState(false);
   const [zoomed, setZoomed] = useState(false);
+  const router = useRouter();
 
   // Mobile swipe state
   const [mobileIndex, setMobileIndex] = useState(0);
@@ -58,6 +60,12 @@ export default function ProductDetailsClient({ product, relatedProducts }: Props
     setCartPop(true);
     setTimeout(() => setCartPop(false), 500);
     toast.success(`${product.name} × ${quantity} added to cart.`, { icon: "🤎" });
+  };
+
+  const handleBuyNow = () => {
+    if (isOutOfStock) { toast.error("This item is currently out of stock."); return; }
+    for (let i = 0; i < quantity; i++) addItem(product);
+    router.push("/checkout");
   };
 
   const handleToggleWishlist = () => {
@@ -353,7 +361,7 @@ export default function ProductDetailsClient({ product, relatedProducts }: Props
             )}
 
             {/* CTA row */}
-            <div className="flex gap-3 pt-2">
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
               <motion.button
                 onClick={handleAddToCart}
                 disabled={isOutOfStock}
@@ -362,7 +370,7 @@ export default function ProductDetailsClient({ product, relatedProducts }: Props
                 className={`flex-1 flex items-center justify-center gap-2.5 font-sans text-xs tracking-widest uppercase py-4 rounded-md transition-all cursor-pointer ${
                   isOutOfStock
                     ? "bg-furnizo-border text-furnizo-muted cursor-not-allowed"
-                    : "lg:bg-furnizo-brown lg:text-furnizo-beige lg:hover:bg-furnizo-charcoal bg-white text-furnizo-brown hover:bg-white/90"
+                    : "lg:bg-white lg:text-furnizo-charcoal lg:border lg:border-furnizo-border lg:hover:bg-furnizo-border/20 bg-white/20 text-white hover:bg-white/30"
                 }`}
               >
                 <ShoppingBag size={14} strokeWidth={1.6} />
@@ -370,10 +378,22 @@ export default function ProductDetailsClient({ product, relatedProducts }: Props
               </motion.button>
 
               <motion.button
+                onClick={handleBuyNow}
+                disabled={isOutOfStock}
+                className={`flex-1 flex items-center justify-center gap-2.5 font-sans text-xs tracking-widest uppercase py-4 rounded-md transition-all cursor-pointer ${
+                  isOutOfStock
+                    ? "bg-furnizo-border text-furnizo-muted cursor-not-allowed"
+                    : "lg:bg-furnizo-brown lg:text-furnizo-beige lg:hover:bg-furnizo-charcoal bg-white text-furnizo-brown hover:bg-white/90"
+                }`}
+              >
+                Buy Now
+              </motion.button>
+
+              <motion.button
                 onClick={handleToggleWishlist}
                 animate={wishlistBounce ? { scale: [1, 1.3, 0.9, 1.1, 1] } : { scale: 1 }}
                 transition={{ duration: 0.4 }}
-                className="flex items-center justify-center w-14 rounded-md border lg:border-furnizo-border border-white/30 lg:text-furnizo-charcoal text-white lg:hover:border-furnizo-brown lg:hover:text-furnizo-brown hover:border-white hover:text-white transition-all cursor-pointer"
+                className="flex items-center justify-center w-full sm:w-14 py-4 rounded-md border lg:border-furnizo-border border-white/30 lg:text-furnizo-charcoal text-white lg:hover:border-furnizo-brown lg:hover:text-furnizo-brown hover:border-white hover:text-white transition-all cursor-pointer"
                 aria-label="Toggle Wishlist"
               >
                 <Heart
