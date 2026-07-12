@@ -42,6 +42,12 @@ export default function ProductDetailsClient({ product, relatedProducts }: Props
   const [mobileIndex, setMobileIndex] = useState(0);
   const dragX = useMotionValue(0);
 
+  const [isImageLoading, setIsImageLoading] = useState(true);
+
+  useEffect(() => {
+    setIsImageLoading(true);
+  }, [activeIndex, mobileIndex]);
+
   const addItem = useCartStore((state) => state.addItem);
   const toggleWishlist = useWishlistStore((state) => state.toggleWishlist);
   const isInWishlist = useWishlistStore((state) => state.hasItem(product.id));
@@ -123,6 +129,11 @@ export default function ProductDetailsClient({ product, relatedProducts }: Props
               }}
               className="relative aspect-[3/4] w-full overflow-hidden rounded-xl bg-furnizo-border/20 mb-6 shadow-sm cursor-zoom-in"
             >
+              {isImageLoading && (
+                <div className="absolute inset-0 bg-furnizo-border/20 animate-pulse flex items-center justify-center z-20">
+                  <div className="h-8 w-8 rounded-full border-2 border-furnizo-brown border-t-transparent animate-spin" />
+                </div>
+              )}
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
                   key={mobileIndex}
@@ -143,6 +154,7 @@ export default function ProductDetailsClient({ product, relatedProducts }: Props
                     className="object-contain bg-white"
                     sizes="100vw"
                     priority
+                    onLoad={() => setIsImageLoading(false)}
                   />
                 </motion.div>
               </AnimatePresence>
@@ -196,6 +208,11 @@ export default function ProductDetailsClient({ product, relatedProducts }: Props
             <div
               className="relative w-full max-w-md aspect-[3/4] overflow-hidden rounded-xl bg-furnizo-border/10 border border-furnizo-border/20 group shadow-sm animate-fade-in"
             >
+              {isImageLoading && (
+                <div className="absolute inset-0 bg-furnizo-border/20 animate-pulse flex items-center justify-center z-20">
+                  <div className="h-8 w-8 rounded-full border-2 border-furnizo-brown border-t-transparent animate-spin" />
+                </div>
+              )}
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
                   key={activeIndex}
@@ -212,6 +229,7 @@ export default function ProductDetailsClient({ product, relatedProducts }: Props
                     className="object-contain bg-white"
                     sizes="50vw"
                     priority
+                    onLoad={() => setIsImageLoading(false)}
                   />
                 </motion.div>
               </AnimatePresence>
