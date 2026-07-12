@@ -1,4 +1,4 @@
-# Furnizo — Premium Minimalist Furniture E-Commerce
+# Furnizo - Premium Minimalist Furniture E-Commerce
 
 **Furnizo** is a minimalist, portfolio-grade furniture e-commerce web application. Built as a personal side project, the goal of this application is to deliver a premium shopping experience featuring clean typography, a warm color palette, and fluid interactive animations.
 
