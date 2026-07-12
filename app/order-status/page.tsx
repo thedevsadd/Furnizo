@@ -211,7 +211,50 @@ export default function OrderStatusPage() {
                     )}
 
                     <div className="py-8 px-2 sm:px-4">
-                      <div className="relative flex justify-between items-center w-full">
+                      {/* Vertical Timeline for Mobile (under sm) */}
+                      <div className="flex flex-col gap-8 w-full sm:hidden">
+                        {steps.map((step, idx) => {
+                          const isCompleted = idx <= activeIndex;
+                          const isActive = idx === activeIndex;
+                          const isLast = idx === steps.length - 1;
+
+                          return (
+                            <div key={idx} className="relative z-10 flex items-center gap-4">
+                              <div className="relative h-7 w-7 flex items-center justify-center flex-shrink-0">
+                                {isActive && (
+                                  <span className="absolute inset-0 rounded-full bg-furnizo-brown/30 animate-ping" />
+                                )}
+                                <div
+                                  className={`relative z-10 h-7 w-7 rounded-full flex items-center justify-center border transition-all duration-500 ${
+                                    isCompleted
+                                      ? "bg-furnizo-brown border-furnizo-brown text-white"
+                                      : "bg-white border-furnizo-border text-furnizo-muted"
+                                  } ${isActive ? "ring-4 ring-furnizo-brown/20 scale-105" : ""}`}
+                                >
+                                  {isCompleted ? <Check size={12} strokeWidth={3} /> : <span className="text-[10px] font-sans font-medium">{idx + 1}</span>}
+                                </div>
+                                {!isLast && (
+                                  <div 
+                                    className={`absolute top-7 left-1/2 -translate-x-1/2 w-0.5 h-8 z-0 ${
+                                      idx < activeIndex ? "bg-furnizo-brown" : "bg-furnizo-border/50"
+                                    }`}
+                                  />
+                                )}
+                              </div>
+                              <span
+                                className={`font-sans text-[10px] uppercase tracking-wider font-semibold ${
+                                  isCompleted ? "text-furnizo-charcoal" : "text-furnizo-muted"
+                                }`}
+                              >
+                                {step.label}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Horizontal Timeline for Desktop (sm and larger) */}
+                      <div className="relative hidden sm:flex justify-between items-center w-full">
                         <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-furnizo-border/50 -translate-y-1/2 z-0" />
                         <div
                           className="absolute top-1/2 left-0 h-0.5 bg-furnizo-brown -translate-y-1/2 z-0 transition-all duration-700 ease-out"
